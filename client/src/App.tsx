@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import DashboardLayout from "./components/DashboardLayout";
 import AccessGate from "./pages/AccessGate";
 import Collaboration from "./pages/Collaboration";
+import ConsolidatedReport from "./pages/ConsolidatedReport";
 
 function Platform() {
   return (
@@ -29,6 +30,16 @@ function CollaborationPlatform() {
   );
 }
 
+function ReportPlatform() {
+  return (
+    <AccessGate>
+      <DashboardLayout>
+        <ConsolidatedReport />
+      </DashboardLayout>
+    </AccessGate>
+  );
+}
+
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
@@ -40,6 +51,7 @@ function Router() {
       <Route path={"/entregas"} component={Platform} />
       <Route path={"/administracao"} component={Platform} />
       <Route path={"/colaboracao"} component={CollaborationPlatform} />
+      <Route path={"/relatorio"} component={ReportPlatform} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

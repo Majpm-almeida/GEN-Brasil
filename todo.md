@@ -86,3 +86,8 @@
 - [x] Permitir a exportação das Fichas-Síntese em PDF com identificação do GT, lente, classificação e conteúdo final.
 - [x] Criar testes automatizados dos novos fluxos de colaboração e histórico.
 - [x] Publicar e validar manualmente os comentários, o histórico e a exportação das Fichas-Síntese.
+- [x] Definir a composição e as regras de prontidão do relatório consolidado do GT.
+- [x] Reunir as três Fichas-Síntese, a Síntese Integrada, os slides e os anexos opcionais selecionados.
+- [x] Criar visualização de impressão e exportação em PDF do relatório consolidado por GT.
+- [x] Criar testes automatizados de composição, prontidão e seleção de anexos do relatório consolidado.
+- [ ] Publicar e validar manualmente o relatório consolidado por GT.

@@ -7,12 +7,23 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import DashboardLayout from "./components/DashboardLayout";
 import AccessGate from "./pages/AccessGate";
+import Collaboration from "./pages/Collaboration";
 
 function Platform() {
   return (
     <AccessGate>
       <DashboardLayout>
         <Home />
+      </DashboardLayout>
+    </AccessGate>
+  );
+}
+
+function CollaborationPlatform() {
+  return (
+    <AccessGate>
+      <DashboardLayout>
+        <Collaboration />
       </DashboardLayout>
     </AccessGate>
   );
@@ -28,6 +39,7 @@ function Router() {
       <Route path={"/sintese"} component={Platform} />
       <Route path={"/entregas"} component={Platform} />
       <Route path={"/administracao"} component={Platform} />
+      <Route path={"/colaboracao"} component={CollaborationPlatform} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

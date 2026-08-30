@@ -22,6 +22,13 @@
       "when": 1788107098555,
       "tag": "0002_plain_thunderbird",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1788130325415,
+      "tag": "0003_breezy_gladiator",
+      "breakpoints": true
     }
   ]
 }

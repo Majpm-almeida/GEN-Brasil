@@ -14,7 +14,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/useMobile";
-import { FilePenLine, LayoutDashboard, LibraryBig, LogOut, PanelLeft, Presentation, Send, Settings2 } from "lucide-react";
+import { FilePenLine, LayoutDashboard, LibraryBig, LogOut, MessageSquareText, PanelLeft, Presentation, Send, Settings2 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -24,6 +24,7 @@ const menuItems = [
   { icon: LayoutDashboard, label: "Visão geral", path: "/" },
   { icon: LibraryBig, label: "Base do caso", path: "/base" },
   { icon: FilePenLine, label: "Fichas-Síntese", path: "/fichas" },
+  { icon: MessageSquareText, label: "Colaboração e versões", path: "/colaboracao" },
   { icon: Presentation, label: "Síntese e slides", path: "/sintese" },
   { icon: Send, label: "Entregas", path: "/entregas" },
   { icon: Settings2, label: "Administração", path: "/administracao" },

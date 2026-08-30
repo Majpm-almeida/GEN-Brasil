@@ -143,6 +143,28 @@ export const workspaceRouter = router({
     }
     return { success: true };
   }),
+  eventComments: router({
+    list: approvedProcedure.input(z.object({ groupId: z.number().int().positive(), eventId: z.number().int().min(1).max(8) })).query(async ({ ctx, input }) => {
+      await assertGroupAccess(ctx.user, input.groupId);
+      return db.listEventComments(input.groupId, input.eventId);
+    }),
+    add: approvedProcedure.input(z.object({ groupId: z.number().int().positive(), eventId: z.number().int().min(1).max(8), content: z.string().trim().min(2).max(2000) })).mutation(async ({ ctx, input }) => {
+      await assertGroupAccess(ctx.user, input.groupId);
+      const id = await db.createEventComment({ ...input, authorUserId: ctx.user.id });
+      return { id };
+    }),
+  }),
+  analysisVersions: approvedProcedure.input(z.object({
+    groupId: z.number().int().positive(),
+    artifact: z.enum(["worksheet", "synthesis"]),
+    lens: z.enum(worksheetLenses).optional(),
+  })).query(async ({ ctx, input }) => {
+    await assertGroupAccess(ctx.user, input.groupId);
+    if (input.artifact === "worksheet" && !input.lens) {
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Selecione a lente da Ficha-Síntese para consultar seu histórico." });
+    }
+    return db.listAnalysisVersions(input);
+  }),
   admin: router({
     groups: approvedProcedure.query(async ({ ctx }) => {
       if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });

@@ -80,6 +80,33 @@ export const integratedSyntheses = mysqlTable("integratedSyntheses", {
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
+export const eventComments = mysqlTable("eventComments", {
+  id: int("id").autoincrement().primaryKey(),
+  groupId: int("groupId").notNull().references(() => workGroups.id, { onDelete: "cascade" }),
+  eventId: int("eventId").notNull(),
+  authorUserId: int("authorUserId").notNull().references(() => users.id, { onDelete: "cascade" }),
+  content: text("content").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => [
+  index("eventCommentsGroupEventIndex").on(table.groupId, table.eventId),
+  index("eventCommentsAuthorIndex").on(table.authorUserId),
+]);
+
+export const analysisVersions = mysqlTable("analysisVersions", {
+  id: int("id").autoincrement().primaryKey(),
+  groupId: int("groupId").notNull().references(() => workGroups.id, { onDelete: "cascade" }),
+  artifact: mysqlEnum("analysisArtifact", ["worksheet", "synthesis"]).notNull(),
+  lens: varchar("lens", { length: 48 }),
+  status: varchar("status", { length: 32 }).notNull(),
+  snapshot: text("snapshot").notNull(),
+  savedByUserId: int("savedByUserId").references(() => users.id, { onDelete: "set null" }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => [
+  index("analysisVersionsGroupArtifactIndex").on(table.groupId, table.artifact, table.lens),
+  index("analysisVersionsSavedByIndex").on(table.savedByUserId),
+]);
+
 export const deliverables = mysqlTable("deliverables", {
   id: int("id").autoincrement().primaryKey(),
   groupId: int("groupId").notNull().references(() => workGroups.id, { onDelete: "cascade" }),

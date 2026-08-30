@@ -80,3 +80,9 @@
 - [x] Exibir uma legenda pedagógica que diferencie evento prioritário de evento complementar justificável.
 - [x] Criar testes automatizados dos novos incrementos da Base do caso.
 - [x] Publicar e validar manualmente a impressão, a busca e a legenda na Base do caso.
+- [x] Modelar comentários por evento, permissões por GT e histórico de versões das análises.
+- [x] Criar comentários por evento visíveis apenas aos integrantes e à coordenação do mesmo GT.
+- [x] Registrar e apresentar o histórico de versões das Fichas-Síntese e da Síntese Estratégica Integrada.
+- [x] Permitir a exportação das Fichas-Síntese em PDF com identificação do GT, lente, classificação e conteúdo final.
+- [x] Criar testes automatizados dos novos fluxos de colaboração e histórico.
+- [ ] Publicar e validar manualmente os comentários, o histórico e a exportação das Fichas-Síntese.

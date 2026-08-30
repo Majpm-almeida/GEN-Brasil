@@ -1,8 +1,10 @@
 import { and, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
+  analysisVersions,
   analyticalWorksheets,
   deliverables,
+  eventComments,
   exerciseSettings,
   groupMembers,
   integratedSyntheses,
@@ -205,6 +207,7 @@ export async function saveWorksheet(groupId: number, userId: number, input: Work
   await db.insert(analyticalWorksheets).values(values).onDuplicateKeyUpdate({
     set: { ...input, updatedByUserId: userId, finalizedAt },
   });
+  await recordAnalysisVersion({ groupId, artifact: "worksheet", lens: input.lens, status: input.status, snapshot: input, savedByUserId: userId });
 }
 
 export async function setWorksheetAppendix(groupId: number, userId: number, lens: WorksheetLens, includeAsAppendix: boolean) {
@@ -237,6 +240,64 @@ export async function saveIntegratedSynthesis(groupId: number, userId: number, i
   await db.insert(integratedSyntheses).values(values).onDuplicateKeyUpdate({
     set: { ...input, updatedByUserId: userId, finalizedAt },
   });
+  await recordAnalysisVersion({ groupId, artifact: "synthesis", status: input.status, snapshot: input, savedByUserId: userId });
+}
+
+export async function createEventComment(input: { groupId: number; eventId: number; authorUserId: number; content: string }) {
+  const db = await databaseOrThrow();
+  const result = await db.insert(eventComments).values(input);
+  return Number(result[0].insertId);
+}
+
+export async function listEventComments(groupId: number, eventId: number) {
+  const db = await databaseOrThrow();
+  return db.select({
+    id: eventComments.id,
+    eventId: eventComments.eventId,
+    content: eventComments.content,
+    createdAt: eventComments.createdAt,
+    updatedAt: eventComments.updatedAt,
+    authorName: users.name,
+    authorEmail: users.email,
+  }).from(eventComments).innerJoin(users, eq(eventComments.authorUserId, users.id))
+    .where(and(eq(eventComments.groupId, groupId), eq(eventComments.eventId, eventId)))
+    .orderBy(desc(eventComments.createdAt));
+}
+
+export async function recordAnalysisVersion(input: {
+  groupId: number;
+  artifact: "worksheet" | "synthesis";
+  lens?: WorksheetLens;
+  status: "rascunho" | "versao_final";
+  snapshot: WorksheetSaveInput | SynthesisSaveInput;
+  savedByUserId: number;
+}) {
+  const db = await databaseOrThrow();
+  await db.insert(analysisVersions).values({
+    groupId: input.groupId,
+    artifact: input.artifact,
+    lens: input.lens ?? null,
+    status: input.status,
+    snapshot: JSON.stringify(input.snapshot),
+    savedByUserId: input.savedByUserId,
+  });
+}
+
+export async function listAnalysisVersions(input: { groupId: number; artifact: "worksheet" | "synthesis"; lens?: WorksheetLens }) {
+  const db = await databaseOrThrow();
+  const filters = [eq(analysisVersions.groupId, input.groupId), eq(analysisVersions.artifact, input.artifact)];
+  if (input.lens) filters.push(eq(analysisVersions.lens, input.lens));
+  return db.select({
+    id: analysisVersions.id,
+    artifact: analysisVersions.artifact,
+    lens: analysisVersions.lens,
+    status: analysisVersions.status,
+    snapshot: analysisVersions.snapshot,
+    createdAt: analysisVersions.createdAt,
+    savedByName: users.name,
+    savedByEmail: users.email,
+  }).from(analysisVersions).leftJoin(users, eq(analysisVersions.savedByUserId, users.id))
+    .where(and(...filters)).orderBy(desc(analysisVersions.createdAt)).limit(30);
 }
 
 export async function setIntegrationMatrixAppendix(groupId: number, userId: number, includeMatrixAsAppendix: boolean) {

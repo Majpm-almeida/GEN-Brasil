@@ -67,10 +67,10 @@
 - [x] Publicar a versão corrigida da base acadêmica no domínio genbrasil.manus.space.
 - [x] Validar manualmente no domínio público os oito eventos completos nos campos Informação disponível e Limite da evidência.
 - [x] Validar manualmente no domínio público a abertura, o conteúdo e o fechamento da janela DESCRIÇÃO COMPLETA.
-- [ ] Validar manualmente no domínio público a janela REGRAS e suas três abas metodológicas.
-- [ ] Registrar no controle de tarefas a confirmação objetiva dessas verificações públicas.
+- [x] Validar manualmente no domínio público a janela REGRAS e suas três abas metodológicas.
+- [x] Registrar no controle de tarefas a confirmação objetiva dessas verificações públicas.
 - [x] Ajustar as abas da janela REGRAS para ocuparem dinamicamente a largura disponível em desktop, mantendo a adaptação em telas menores.
-- [ ] Validar e publicar o novo dimensionamento responsivo das abas da janela REGRAS.
+- [x] Validar e publicar o novo dimensionamento responsivo das abas da janela REGRAS.
 - [x] Verificar e restaurar o marcador de prioridade dos eventos conforme a lente analítica do GT.
 - [x] Exibir na Base do caso os eventos prioritários para a lente do GT selecionado, incluindo a regra de Grande Estratégia.
 - [x] Corrigir o erro de importação/exportação listPendingAccessRequests no servidor de desenvolvimento e confirmar a inicialização sem erros de runtime.

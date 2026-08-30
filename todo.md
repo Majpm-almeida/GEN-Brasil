@@ -85,4 +85,4 @@
 - [x] Registrar e apresentar o histórico de versões das Fichas-Síntese e da Síntese Estratégica Integrada.
 - [x] Permitir a exportação das Fichas-Síntese em PDF com identificação do GT, lente, classificação e conteúdo final.
 - [x] Criar testes automatizados dos novos fluxos de colaboração e histórico.
-- [ ] Publicar e validar manualmente os comentários, o histórico e a exportação das Fichas-Síntese.
+- [x] Publicar e validar manualmente os comentários, o histórico e a exportação das Fichas-Síntese.

@@ -62,10 +62,15 @@
 - [x] Incluir a janela REGRAS com abas para realidade e hipótese, uso dos eventos e mapa de lentes ao longo da semana.
 - [x] Validar a fidelidade do conteúdo e as janelas de consulta no ambiente de desenvolvimento.
 - [x] Publicar a atualização da base completa do exercício.
-- [ ] Confirmar no domínio público a exibição dos oito eventos completos e o funcionamento das janelas DESCRIÇÃO COMPLETA e REGRAS.
-- [ ] Diagnosticar por que a publicação atual não refletiu os eventos completos e as janelas de consulta no domínio público.
-- [ ] Publicar e validar a versão corrigida da base acadêmica no domínio genbrasil.manus.space.
-- [ ] Realizar a validação manual no domínio público dos eventos completos e das janelas DESCRIÇÃO COMPLETA e REGRAS.
+- [x] Confirmar no domínio público os marcadores de prioridade dos eventos conforme a lente do GT selecionado.
+- [x] Diagnosticar a defasagem de propagação da publicação anterior e confirmar a disponibilização da versão atualizada.
+- [x] Publicar a versão corrigida da base acadêmica no domínio genbrasil.manus.space.
+- [x] Validar manualmente no domínio público os oito eventos completos nos campos Informação disponível e Limite da evidência.
+- [x] Validar manualmente no domínio público a abertura, o conteúdo e o fechamento da janela DESCRIÇÃO COMPLETA.
+- [ ] Validar manualmente no domínio público a janela REGRAS e suas três abas metodológicas.
+- [ ] Registrar no controle de tarefas a confirmação objetiva dessas verificações públicas.
+- [x] Ajustar as abas da janela REGRAS para ocuparem dinamicamente a largura disponível em desktop, mantendo a adaptação em telas menores.
+- [ ] Validar e publicar o novo dimensionamento responsivo das abas da janela REGRAS.
 - [x] Verificar e restaurar o marcador de prioridade dos eventos conforme a lente analítica do GT.
 - [x] Exibir na Base do caso os eventos prioritários para a lente do GT selecionado, incluindo a regra de Grande Estratégia.
 - [x] Corrigir o erro de importação/exportação listPendingAccessRequests no servidor de desenvolvimento e confirmar a inicialização sem erros de runtime.

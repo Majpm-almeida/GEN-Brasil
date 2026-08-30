@@ -7,4 +7,8 @@ export const ENV = {
   isProduction: process.env.NODE_ENV === "production",
   forgeApiUrl: process.env.BUILT_IN_FORGE_API_URL ?? "",
   forgeApiKey: process.env.BUILT_IN_FORGE_API_KEY ?? "",
+  firebaseAdminServiceAccountJson: process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON ?? "",
+  managerEmail: process.env.MANAGER_EMAIL ?? "tenpm.almeida@gmail.com",
+  resendApiKey: process.env.RESEND_API_KEY ?? "",
+  emailFrom: process.env.EMAIL_FROM ?? "",
 };

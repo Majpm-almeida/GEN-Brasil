@@ -7,6 +7,7 @@ import { SignJWT, jwtVerify } from "jose";
 import type { User } from "../../drizzle/schema";
 import * as db from "../db";
 import { ENV } from "./env";
+import { verifyFirebaseIdToken } from "./firebaseAdmin";
 import type {
   ExchangeTokenRequest,
   ExchangeTokenResponse,
@@ -267,6 +268,24 @@ class SDKServer {
       const authHeader = req.headers.authorization;
       if (typeof authHeader === "string" && authHeader.startsWith("Bearer ")) {
         sessionToken = authHeader.slice(7);
+      }
+    }
+
+    if (sessionToken) {
+      try {
+        const firebaseToken = await verifyFirebaseIdToken(sessionToken);
+        const openId = `firebase:${firebaseToken.uid}`;
+        await db.upsertUser({
+          openId,
+          name: firebaseToken.name ?? null,
+          email: firebaseToken.email ?? null,
+          loginMethod: "google",
+          lastSignedIn: new Date(),
+        });
+        const firebaseUser = await db.getUserByOpenId(openId);
+        if (firebaseUser) return firebaseUser;
+      } catch {
+        // Tokens de sessão existentes continuam sendo avaliados pelo fluxo legado abaixo.
       }
     }
 

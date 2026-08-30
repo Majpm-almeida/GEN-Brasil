@@ -2,6 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
+import { accessRouter } from "./routers/access";
 import { workspaceRouter } from "./routers/workspace";
 
 export const appRouter = router({
@@ -14,6 +15,7 @@ export const appRouter = router({
       return { success: true } as const;
     }),
   }),
+  access: accessRouter,
   workspace: workspaceRouter,
 });
 

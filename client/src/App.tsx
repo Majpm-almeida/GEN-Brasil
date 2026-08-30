@@ -6,12 +6,15 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import DashboardLayout from "./components/DashboardLayout";
+import AccessGate from "./pages/AccessGate";
 
 function Platform() {
   return (
-    <DashboardLayout>
-      <Home />
-    </DashboardLayout>
+    <AccessGate>
+      <DashboardLayout>
+        <Home />
+      </DashboardLayout>
+    </AccessGate>
   );
 }
 

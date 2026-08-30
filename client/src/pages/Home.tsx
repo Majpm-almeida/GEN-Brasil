@@ -40,6 +40,7 @@ import {
   Landmark,
   Loader2,
   LockKeyhole,
+  LogOut,
   Save,
   Send,
   ShieldCheck,
@@ -271,6 +272,24 @@ function DeliverablesPanel({ activeGroupId }: { activeGroupId: number | null }) 
   })}</div></div>;
 }
 
+function PendingApprovalPanel({ isAdmin }: { isAdmin: boolean }) {
+  const utils = trpc.useUtils();
+  const { data: pendingRequests, isLoading } = trpc.access.pending.useQuery(undefined, { enabled: isAdmin, refetchOnWindowFocus: true });
+  const resendNotification = trpc.access.resendNotification.useMutation({
+    onSuccess: data => toast.success(data.delivery.sent ? "Notificação reenviada ao gestor." : "A solicitação foi salva, mas o e-mail não pôde ser reenviado."),
+    onError: error => toast.error(error.message),
+  });
+  const approve = trpc.access.approve.useMutation({
+    onSuccess: data => {
+      toast.success(`${data.request.name || data.request.email || "Participante"} recebeu acesso ao GEN-Brasil.`);
+      utils.access.pending.invalidate();
+    },
+    onError: error => toast.error(error.message),
+  });
+  if (!isAdmin) return null;
+  return <Card className="mb-6 border-0 bg-card/85 shadow-sm"><CardHeader className="border-b border-border/70 pb-4"><p className="eyebrow">Acesso à plataforma</p><CardTitle className="mt-1 font-serif text-xl text-primary">Solicitações aguardando aprovação</CardTitle><CardDescription>Contas Google que iniciaram o acesso ao GEN-Brasil. Ao aprovar, o participante passa a acessar a jornada e recebe uma mensagem de boas-vindas.</CardDescription></CardHeader><CardContent className="p-0">{isLoading ? <div className="flex h-28 items-center justify-center"><Loader2 className="h-5 w-5 animate-spin text-primary" /></div> : pendingRequests?.length ? <div className="divide-y divide-border/70">{pendingRequests.map(request => <div key={request.uid} className="flex flex-col gap-3 px-6 py-4 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-semibold text-primary">{request.name || "Participante sem nome"}</p><p className="mt-1 text-sm text-muted-foreground">{request.email || "E-mail não informado"}</p><p className="mt-1 text-xs text-muted-foreground">Solicitação registrada em {new Date(request.requestedAt).toLocaleString("pt-BR")}</p></div><div className="flex flex-wrap gap-2"><Button variant="outline" size="sm" disabled={resendNotification.isPending} onClick={() => resendNotification.mutate({ uid: request.uid })}><Send className="mr-2 h-3.5 w-3.5" />Reenviar e-mail</Button><Button disabled={approve.isPending} onClick={() => approve.mutate({ uid: request.uid })}><CheckCircle2 className="mr-2 h-4 w-4" />Aprovar acesso</Button></div></div>)}</div> : <div className="px-6 py-8 text-sm leading-6 text-muted-foreground">Não há solicitações pendentes no momento.</div>}</CardContent></Card>;
+}
+
 function AdminDeliveryOverview({ isAdmin }: { isAdmin: boolean }) {
   const { data: overview, isLoading } = trpc.workspace.admin.deliveryOverview.useQuery(undefined, { enabled: isAdmin });
   if (!isAdmin) return null;
@@ -298,12 +317,12 @@ function AdministrationPanel({ activeGroupId, onGroupChange, isAdmin }: { active
 }
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [location] = useLocation();
   const { data: access } = trpc.workspace.myAccess.useQuery();
   const [activeGroupId, setActiveGroupId] = useState<number | null>(null);
   useEffect(() => { if (activeGroupId || !access) return; const first = access.isAdmin ? access.availableGroups[0] : access.memberships[0]; if (first) setActiveGroupId("groupId" in first ? first.groupId : first.id); }, [access, activeGroupId]);
   const copy = viewTitles[location] ?? viewTitles["/"];
   const isAdmin = Boolean(access?.isAdmin);
-  return <div className="mx-auto w-full max-w-[1520px] pb-10"><header className="mb-7 flex flex-col gap-5 border-b border-border/70 pb-6 sm:flex-row sm:items-end sm:justify-between"><div><p className="eyebrow">{copy.eyebrow}</p><h1 className="mt-2 font-serif text-2xl leading-snug text-primary sm:text-3xl">{copy.title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{copy.text}</p></div><div className="flex flex-wrap items-center gap-3"><GroupSelector activeGroupId={activeGroupId} onChange={setActiveGroupId} />{isAdmin && <StatusPill tone="success">Coordenação</StatusPill>}<div className="hidden text-right sm:block"><p className="text-sm font-semibold text-primary">{user?.name}</p><p className="text-xs text-muted-foreground">Ambiente autenticado</p></div></div></header>{activeGroupId && <MatrixAppendixSelectors activeGroupId={activeGroupId} />}{location === "/" && <JourneyOverview activeGroupId={activeGroupId} />}{location === "/base" && <CaseLibrary />}{location === "/fichas" && <WorksheetEditor activeGroupId={activeGroupId} />}{location === "/sintese" && <SynthesisEditor activeGroupId={activeGroupId} />}{location === "/entregas" && <DeliverablesPanel activeGroupId={activeGroupId} />}{location === "/administracao" && <><AdminDeliveryOverview isAdmin={isAdmin} /><AdministrationPanel activeGroupId={activeGroupId} onGroupChange={setActiveGroupId} isAdmin={isAdmin} /></>}</div>;
+  return <div className="mx-auto w-full max-w-[1520px] pb-10"><header className="mb-7 flex flex-col gap-5 border-b border-border/70 pb-6 sm:flex-row sm:items-end sm:justify-between"><div><p className="eyebrow">{copy.eyebrow}</p><h1 className="mt-2 font-serif text-2xl leading-snug text-primary sm:text-3xl">{copy.title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{copy.text}</p></div><div className="flex flex-wrap items-center gap-3"><GroupSelector activeGroupId={activeGroupId} onChange={setActiveGroupId} />{isAdmin && <StatusPill tone="success">Coordenação</StatusPill>}<div className="hidden text-right sm:block"><p className="text-sm font-semibold text-primary">{user?.name}</p><p className="text-xs text-muted-foreground">Ambiente autenticado</p></div><Button variant="outline" size="sm" className="hidden border-destructive/25 text-destructive hover:bg-destructive/10 hover:text-destructive lg:inline-flex" onClick={() => void logout()}><LogOut className="mr-2 h-3.5 w-3.5" />Sair</Button></div></header>{activeGroupId && <MatrixAppendixSelectors activeGroupId={activeGroupId} />}{location === "/" && <JourneyOverview activeGroupId={activeGroupId} />}{location === "/base" && <CaseLibrary />}{location === "/fichas" && <WorksheetEditor activeGroupId={activeGroupId} />}{location === "/sintese" && <SynthesisEditor activeGroupId={activeGroupId} />}{location === "/entregas" && <DeliverablesPanel activeGroupId={activeGroupId} />}{location === "/administracao" && <><PendingApprovalPanel isAdmin={isAdmin} /><AdminDeliveryOverview isAdmin={isAdmin} /><AdministrationPanel activeGroupId={activeGroupId} onGroupChange={setActiveGroupId} isAdmin={isAdmin} /></>}</div>;
 }

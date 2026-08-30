@@ -24,3 +24,26 @@
 - [x] Confirmar que Maj-almeida/GEN-Brasil não estava disponível e localizar o repositório correto.
 - [x] Identificar o repositório existente Majpm-almeida/GEN-Brasil e enviar a versão validada do projeto.
 - [x] Verificar a autorização GitHub renovada para o repositório Majpm-almeida/GEN-Brasil.
+- [x] Definir e implementar o fluxo de autenticação Google controlado pelo Firebase.
+- [x] Registrar solicitações de acesso no Firebase e manter usuários pendentes em uma ante-sala informativa.
+- [x] Criar a aprovação de acesso pelo gestor e o controle de liberação para a página inicial.
+- [x] Notificar o gestor por e-mail sobre novas solicitações e enviar e-mail de boas-vindas após a aprovação.
+- [x] Configurar as credenciais externas e executar validações automatizadas do fluxo de acesso antes da publicação pública.
+- [x] Implementar a alternativa A: Firebase Authentication e Firestore, com notificações por serviço de e-mail acionado pelo servidor.
+- [x] Aplicar a configuração pública recebida do aplicativo Web Firebase e validar o provedor Google.
+- [x] Autorizar o domínio de pré-visualização no Firebase Authentication para testar o login Google.
+- [x] Verificar o reconhecimento administrativo da conta do gestor após o login Google de teste.
+- [ ] Validar com uma conta Google secundária a solicitação pendente, a ante-sala, a aprovação do gestor e os e-mails transacionais.
+- [x] Corrigir o link de revisão das solicitações para usar o domínio efetivo da aplicação, sem apontar para um endereço provisório em manutenção.
+- [ ] Permitir o reenvio da notificação de solicitação ao gestor após a correção do link de revisão.
+- [x] Exibir uma ação visível de sair e trocar conta no ambiente principal autenticado, inclusive em telas estreitas.
+- [x] Adicionar uma ação persistente de trocar conta Google, inclusive após o acesso ser aprovado.
+- [x] Verificar o domínio magnavis.shop no serviço de e-mail e configurar o remetente institucional do GEN-Brasil.
+- [x] Coletar e configurar a chave RESEND_API_KEY e o remetente EMAIL_FROM do GEN-Brasil em magnavis.shop.
+- [x] Implementar e testar o envio de e-mails transacionais do GEN-Brasil pelo remetente configurado.
+- [ ] Criar o checkpoint da versão com autenticação Firebase e preparar a publicação pública.
+- [ ] Autorizar no Firebase Authentication o domínio público definitivo gerado na publicação.
+- [ ] Confirmar, no endereço público, o reenvio da solicitação com link correto e o recebimento do e-mail de boas-vindas após a aprovação.
+- [x] Configurar o remetente GEN-Brasil <acesso@magnavis.shop> e a chave de envio restrita ao projeto.
+- [x] Ativar no Firebase o provedor de autenticação Google para o aplicativo Web GEN-Brasil.
+- [x] Criar o banco Cloud Firestore para registrar solicitações e aprovações de acesso.

@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
 import { CheckCircle2, ClipboardCheck, Clock3, LogOut, ShieldCheck, Sparkles } from "lucide-react";
-import { useEffect } from "react";
-import { useLocation } from "wouter";
 
 function BrandedShell({ children }: { children: React.ReactNode }) {
   return <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f7f6f1] px-4 py-10 text-primary"><div className="pointer-events-none absolute -left-24 top-8 h-80 w-80 rounded-full border border-primary/10 bg-[#d7c693]/15" /><div className="pointer-events-none absolute -bottom-24 -right-20 h-96 w-96 rounded-full border border-primary/10 bg-[#15364c]/10" />{children}</main>;
@@ -12,12 +10,10 @@ function BrandedShell({ children }: { children: React.ReactNode }) {
 
 export default function AccessGate({ children }: { children: React.ReactNode }) {
   const { user, loading, login, logout } = useAuth();
-  const [, setLocation] = useLocation();
   const access = trpc.access.status.useQuery(undefined, { enabled: Boolean(user) && !loading, retry: false, refetchOnWindowFocus: true });
 
-  useEffect(() => {
-    if (access.data?.status === "approved") setLocation("/");
-  }, [access.data?.status, setLocation]);
+  // A aprovação libera o conteúdo na rota que o usuário solicitou. Redirecionar
+  // sempre para "/" faria atalhos como /colaboracao e /relatorio perderem o destino.
 
   if (loading || (user && access.isLoading)) {
     return <BrandedShell><div className="relative z-10 text-center"><div className="mx-auto h-9 w-9 animate-spin rounded-full border-2 border-primary/20 border-t-primary" /><p className="mt-4 text-sm text-muted-foreground">Verificando seu acesso ao GEN-Brasil...</p></div></BrandedShell>;

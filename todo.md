@@ -90,4 +90,7 @@
 - [x] Reunir as três Fichas-Síntese, a Síntese Integrada, os slides e os anexos opcionais selecionados.
 - [x] Criar visualização de impressão e exportação em PDF do relatório consolidado por GT.
 - [x] Criar testes automatizados de composição, prontidão e seleção de anexos do relatório consolidado.
-- [ ] Publicar e validar manualmente o relatório consolidado por GT.
+- [x] Publicar e validar manualmente o relatório consolidado por GT.
+- [x] Corrigir o menu Colaboração e versões para que abra a rota do submódulo colaborativo.
+- [x] Adicionar teste automatizado de rota para impedir o redirecionamento de Colaboração e versões à Visão Geral.
+- [ ] Publicar e validar manualmente a navegação para Colaboração e versões após a correção.

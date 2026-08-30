@@ -79,4 +79,4 @@
 - [x] Adicionar busca textual para filtrar eventos por número, título, informação disponível ou limite da evidência.
 - [x] Exibir uma legenda pedagógica que diferencie evento prioritário de evento complementar justificável.
 - [x] Criar testes automatizados dos novos incrementos da Base do caso.
-- [ ] Publicar e validar manualmente a impressão, a busca e a legenda na Base do caso.
+- [x] Publicar e validar manualmente a impressão, a busca e a legenda na Base do caso.

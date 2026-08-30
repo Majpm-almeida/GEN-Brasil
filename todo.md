@@ -61,6 +61,12 @@
 - [x] Incluir a janela DESCRIÇÃO COMPLETA com o texto integral do Caso de Estudo: Minerais Críticos, Autonomia e Poder Nacional.
 - [x] Incluir a janela REGRAS com abas para realidade e hipótese, uso dos eventos e mapa de lentes ao longo da semana.
 - [x] Validar a fidelidade do conteúdo e as janelas de consulta no ambiente de desenvolvimento.
-- [ ] Publicar a atualização da base completa do exercício.
+- [x] Publicar a atualização da base completa do exercício.
+- [ ] Confirmar no domínio público a exibição dos oito eventos completos e o funcionamento das janelas DESCRIÇÃO COMPLETA e REGRAS.
+- [ ] Diagnosticar por que a publicação atual não refletiu os eventos completos e as janelas de consulta no domínio público.
+- [ ] Publicar e validar a versão corrigida da base acadêmica no domínio genbrasil.manus.space.
+- [ ] Realizar a validação manual no domínio público dos eventos completos e das janelas DESCRIÇÃO COMPLETA e REGRAS.
+- [x] Verificar e restaurar o marcador de prioridade dos eventos conforme a lente analítica do GT.
+- [x] Exibir na Base do caso os eventos prioritários para a lente do GT selecionado, incluindo a regra de Grande Estratégia.
 - [x] Corrigir o erro de importação/exportação listPendingAccessRequests no servidor de desenvolvimento e confirmar a inicialização sem erros de runtime.
 - [x] Revalidar a tela Base do caso, os oito eventos completos e as janelas DESCRIÇÃO COMPLETA e REGRAS após eliminar o erro de runtime.

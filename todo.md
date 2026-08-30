@@ -94,4 +94,4 @@
 - [x] Corrigir o menu Colaboração e versões para que abra a rota do submódulo colaborativo.
 - [x] Adicionar teste automatizado de rota para impedir o redirecionamento de Colaboração e versões à Visão Geral.
 - [x] Publicar e validar manualmente a navegação para Colaboração e versões após a correção.
-- [ ] Criar commit e enviar ao GitHub as atualizações recentes da Base do caso, colaboração, relatório consolidado e correções de navegação.
+- [x] Criar commit e enviar ao GitHub as atualizações recentes da Base do caso, colaboração, relatório consolidado e correções de navegação.

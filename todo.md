@@ -19,3 +19,8 @@
 - [x] Inicializar os registros de entregas por GT para mostrar estados consistentes antes da primeira edição.
 - [x] Adicionar seletores de inclusão das Matrizes de Teste e da Matriz de Integração como anexos opcionais do relatório final.
 - [x] Exibir os anexos selecionados no controle de entregas e validar essa regra em testes automatizados.
+- [ ] Exportar a versão validada do GEN-Brasil para o repositório GitHub definido pelo usuário.
+- [ ] Verificar o acesso de escrita e enviar a versão validada para Maj-almeida/GEN-Brasil.
+- [ ] Confirmar a disponibilidade pública do repositório Maj-almeida/GEN-Brasil antes do envio.
+- [ ] Criar um novo repositório GitHub para o GEN-Brasil e enviar a versão validada do projeto.
+- [ ] Verificar a autorização GitHub renovada para o repositório Majpm-almeida/GEN-Brasil.

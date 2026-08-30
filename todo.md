@@ -75,3 +75,8 @@
 - [x] Exibir na Base do caso os eventos prioritários para a lente do GT selecionado, incluindo a regra de Grande Estratégia.
 - [x] Corrigir o erro de importação/exportação listPendingAccessRequests no servidor de desenvolvimento e confirmar a inicialização sem erros de runtime.
 - [x] Revalidar a tela Base do caso, os oito eventos completos e as janelas DESCRIÇÃO COMPLETA e REGRAS após eliminar o erro de runtime.
+- [x] Permitir a impressão do Caso de Estudo e das Regras de utilização diretamente nas janelas de consulta.
+- [x] Adicionar busca textual para filtrar eventos por número, título, informação disponível ou limite da evidência.
+- [x] Exibir uma legenda pedagógica que diferencie evento prioritário de evento complementar justificável.
+- [x] Criar testes automatizados dos novos incrementos da Base do caso.
+- [ ] Publicar e validar manualmente a impressão, a busca e a legenda na Base do caso.

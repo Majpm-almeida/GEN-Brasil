@@ -1,0 +1,2 @@
+ALTER TABLE `analyticalWorksheets` ADD `includeAsAppendix` boolean DEFAULT false NOT NULL;--> statement-breakpoint
+ALTER TABLE `integratedSyntheses` ADD `includeMatrixAsAppendix` boolean DEFAULT false NOT NULL;

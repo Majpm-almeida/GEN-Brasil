@@ -1,0 +1,21 @@
+# Projeto TODO — GEN-Brasil
+
+- [x] Converter a Coletânea CSD Semana 04 em uma estrutura de dados do caso, eventos, lentes, critérios, referências e produtos.
+- [x] Modelar os papéis de participante, dirigente, relator e administrador, vinculados a Grupos de Trabalho.
+- [x] Criar o esquema de dados e os serviços para GTs, participantes, respostas analíticas e entregas.
+- [x] Implementar autenticação e controle de acesso por papel e Grupo de Trabalho.
+- [x] Criar o painel da jornada com programação de 31 de agosto a 4 de setembro, prazos e status das entregas do GT.
+- [x] Criar a base de consulta pré-carregada do caso “Minerais Críticos, Autonomia e Poder Nacional”, eventos, orientações, critérios e referências.
+- [x] Criar o formulário colaborativo da Ficha-Síntese Guerra Híbrida com classificações, evidências, vulnerabilidades, vínculos, incertezas e fundamentação.
+- [x] Criar o formulário colaborativo da Ficha-Síntese Lawfare com classificações, evidências, vulnerabilidades, vínculos, incertezas e fundamentação.
+- [x] Criar o formulário colaborativo da Ficha-Síntese Segurança Transnacional com classificações, evidências, vulnerabilidades, vínculos, incertezas e fundamentação.
+- [x] Criar o espaço de Síntese Estratégica Integrada e a estrutura dos quatro slides finais.
+- [x] Criar a área de submissão e consulta de produtos, distinguindo rascunho, versão final e pendências.
+- [x] Criar o painel administrativo inicial para configuração de GTs, participantes e orientações complementares, com dados-base acadêmicos pré-carregados e protegidos, além de acompanhar as entregas.
+- [x] Aplicar uma interface elegante, acessível e responsiva em português brasileiro.
+- [x] Criar e executar testes automatizados de regras de acesso, status e validação de entregas.
+- [x] Verificar visualmente os principais fluxos em telas de computador e celular.
+- [x] Exibir no painel da jornada o status individual de cada produto do GT, com prazo e pendências de preenchimento.
+- [x] Inicializar os registros de entregas por GT para mostrar estados consistentes antes da primeira edição.
+- [x] Adicionar seletores de inclusão das Matrizes de Teste e da Matriz de Integração como anexos opcionais do relatório final.
+- [x] Exibir os anexos selecionados no controle de entregas e validar essa regra em testes automatizados.

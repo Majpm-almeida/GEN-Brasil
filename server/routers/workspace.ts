@@ -3,7 +3,7 @@ import { z } from "zod";
 import * as db from "../db";
 import { classificationOptions, worksheetLenses } from "../../shared/exercise";
 import { canRegisterSubmission, isSynthesisComplete, isWorksheetComplete } from "../../shared/validation";
-import { protectedProcedure, router } from "../_core/trpc";
+import { approvedProcedure, router } from "../_core/trpc";
 
 const groupRoleSchema = z.enum(["dirigente", "relator", "integrante"]);
 const worksheetStatusSchema = z.enum(["rascunho", "versao_final"]);
@@ -19,18 +19,18 @@ async function assertGroupAccess(user: { id: number; role: "user" | "admin" }, g
 }
 
 export const workspaceRouter = router({
-  myAccess: protectedProcedure.query(async ({ ctx }) => {
+  myAccess: approvedProcedure.query(async ({ ctx }) => {
     const memberships = await db.getMembershipsForUser(ctx.user.id);
     const availableGroups = ctx.user.role === "admin" ? await db.listWorkGroups() : [];
     return { isAdmin: ctx.user.role === "admin", memberships, availableGroups };
   }),
-  groupWorkspace: protectedProcedure.input(z.object({ groupId: z.number().int().positive() })).query(async ({ ctx, input }) => {
+  groupWorkspace: approvedProcedure.input(z.object({ groupId: z.number().int().positive() })).query(async ({ ctx, input }) => {
     const access = await assertGroupAccess(ctx.user, input.groupId);
     const workspace = await db.getGroupWorkspace(input.groupId);
     if (!workspace) throw new TRPCError({ code: "NOT_FOUND", message: "Grupo de Trabalho não encontrado." });
     return { ...workspace, access };
   }),
-  saveWorksheet: protectedProcedure.input(z.object({
+  saveWorksheet: approvedProcedure.input(z.object({
     groupId: z.number().int().positive(),
     lens: z.enum(worksheetLenses),
     classification: z.enum(classificationOptions).nullable().optional(),
@@ -66,7 +66,7 @@ export const workspaceRouter = router({
     });
     return { success: true };
   }),
-  saveSynthesis: protectedProcedure.input(z.object({
+  saveSynthesis: approvedProcedure.input(z.object({
     groupId: z.number().int().positive(),
     selectedEventIds: z.string().nullable().optional(),
     connectionNotes: z.string().nullable().optional(),
@@ -100,7 +100,7 @@ export const workspaceRouter = router({
     });
     return { success: true };
   }),
-  setDeliverableStatus: protectedProcedure.input(z.object({
+  setDeliverableStatus: approvedProcedure.input(z.object({
     groupId: z.number().int().positive(), type: deliverableTypeSchema, status: deliverableStatusSchema, checklistConfirmed: z.boolean(),
   })).mutation(async ({ ctx, input }) => {
     const access = await assertGroupAccess(ctx.user, input.groupId);
@@ -128,7 +128,7 @@ export const workspaceRouter = router({
     await db.setDeliverableStatus({ ...input, userId: ctx.user.id });
     return { success: true };
   }),
-  setAppendix: protectedProcedure.input(z.object({
+  setAppendix: approvedProcedure.input(z.object({
     groupId: z.number().int().positive(),
     source: z.enum(["worksheet", "integration"]),
     lens: z.enum(worksheetLenses).optional(),
@@ -144,37 +144,42 @@ export const workspaceRouter = router({
     return { success: true };
   }),
   admin: router({
-    groups: protectedProcedure.query(async ({ ctx }) => {
+    groups: approvedProcedure.query(async ({ ctx }) => {
       if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
       return db.listWorkGroups();
     }),
-    deliveryOverview: protectedProcedure.query(async ({ ctx }) => {
+    deliveryOverview: approvedProcedure.query(async ({ ctx }) => {
       if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
       return db.getAdminDeliveryOverview();
     }),
-    initializeOfficialGroups: protectedProcedure.mutation(async ({ ctx }) => {
+    initializeOfficialGroups: approvedProcedure.mutation(async ({ ctx }) => {
       if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
       const groups = await db.initializeOfficialWorkGroups();
       return { count: groups.length };
     }),
-    participants: protectedProcedure.query(async ({ ctx }) => {
+    participants: approvedProcedure.query(async ({ ctx }) => {
       if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
       return db.listParticipants();
     }),
-    createGroup: protectedProcedure.input(z.object({ code: z.string().min(3).max(16), missionAxis: z.string().min(2), missionText: z.string().min(20), presentationSlot: z.string().max(80).nullable().optional() })).mutation(async ({ ctx, input }) => {
+    createGroup: approvedProcedure.input(z.object({ code: z.string().min(3).max(16), missionAxis: z.string().min(2), missionText: z.string().min(20), presentationSlot: z.string().max(80).nullable().optional() })).mutation(async ({ ctx, input }) => {
       if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
       return { id: await db.createWorkGroup(input) };
     }),
-    assignParticipant: protectedProcedure.input(z.object({ groupId: z.number().int().positive(), userId: z.number().int().positive(), role: groupRoleSchema, course: z.string().max(160).nullable().optional() })).mutation(async ({ ctx, input }) => {
+    assignParticipant: approvedProcedure.input(z.object({ groupId: z.number().int().positive(), userId: z.number().int().positive(), role: groupRoleSchema, course: z.string().max(160).nullable().optional() })).mutation(async ({ ctx, input }) => {
       if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
       await db.assignParticipant(input);
       return { success: true };
     }),
-    getSettings: protectedProcedure.query(async ({ ctx }) => {
+    removeParticipant: approvedProcedure.input(z.object({ groupId: z.number().int().positive(), userId: z.number().int().positive() })).mutation(async ({ ctx, input }) => {
+      if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+      await db.removeParticipantFromGroup(input);
+      return { success: true };
+    }),
+    getSettings: approvedProcedure.query(async ({ ctx }) => {
       if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
       return db.getExerciseSettings();
     }),
-    saveSettings: protectedProcedure.input(z.object({ coordinationNote: z.string().nullable().optional(), finalSubmissionInstructions: z.string().nullable().optional(), exerciseOpen: z.boolean() })).mutation(async ({ ctx, input }) => {
+    saveSettings: approvedProcedure.input(z.object({ coordinationNote: z.string().nullable().optional(), finalSubmissionInstructions: z.string().nullable().optional(), exerciseOpen: z.boolean() })).mutation(async ({ ctx, input }) => {
       if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
       await db.saveExerciseSettings({ ...input, userId: ctx.user.id });
       return { success: true };

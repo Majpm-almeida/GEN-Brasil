@@ -52,3 +52,8 @@
 - [x] Confirmar com uma conta secundária, no domínio público, o recebimento do e-mail de boas-vindas após a aprovação.
 - [x] Validar automaticamente que o reenvio da solicitação ao gestor usa o link genbrasil.manus.space.
 - [x] Adicionar teste automatizado para a nova ação de reenvio da notificação de solicitação.
+- [x] Modelar a remoção de participante do GT sem apagar histórico de produções acadêmicas.
+- [x] Implementar a revogação de acesso à plataforma com status REVOGADO no painel de solicitações.
+- [x] Adicionar controles administrativos para remover vínculo de GT e revogar acesso de participante.
+- [x] Criar testes das permissões, da revogação e da remoção de vínculo, além de verificar a interface atualizada.
+- [x] Exibir em Contas disponíveis os GTs vinculados, os papéis e os cursos de origem de cada participante.

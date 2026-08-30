@@ -63,6 +63,13 @@ export async function getUserByOpenId(openId: string) {
   return result[0];
 }
 
+export async function getUserById(userId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+  return result[0];
+}
+
 export async function getMembershipsForUser(userId: number) {
   const db = await databaseOrThrow();
   return db.select({
@@ -158,14 +165,23 @@ export async function initializeOfficialWorkGroups() {
 
 export async function listParticipants() {
   const db = await databaseOrThrow();
-  return db.select({ id: users.id, name: users.name, email: users.email, role: users.role, lastSignedIn: users.lastSignedIn })
-    .from(users).orderBy(desc(users.lastSignedIn));
+  const [participants, memberships] = await Promise.all([
+    db.select({ id: users.id, name: users.name, email: users.email, role: users.role, lastSignedIn: users.lastSignedIn }).from(users).orderBy(desc(users.lastSignedIn)),
+    db.select({ userId: groupMembers.userId, groupId: groupMembers.groupId, groupCode: workGroups.code, role: groupMembers.role, course: groupMembers.course })
+      .from(groupMembers).innerJoin(workGroups, eq(groupMembers.groupId, workGroups.id)).where(eq(groupMembers.active, true)),
+  ]);
+  return participants.map(participant => ({ ...participant, memberships: memberships.filter(membership => membership.userId === participant.id) }));
 }
 
 export async function assignParticipant(input: { groupId: number; userId: number; role: GroupRole; course?: string | null }) {
   const db = await databaseOrThrow();
   await db.insert(groupMembers).values({ ...input, course: input.course ?? null, active: true })
     .onDuplicateKeyUpdate({ set: { role: input.role, course: input.course ?? null, active: true } });
+}
+
+export async function removeParticipantFromGroup(input: { groupId: number; userId: number }) {
+  const db = await databaseOrThrow();
+  await db.update(groupMembers).set({ active: false }).where(and(eq(groupMembers.groupId, input.groupId), eq(groupMembers.userId, input.userId)));
 }
 
 export type WorksheetSaveInput = {

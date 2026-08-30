@@ -1,4 +1,4 @@
-export type AccessStatus = "pending" | "approved" | "rejected";
+export type AccessStatus = "pending" | "approved" | "rejected" | "revoked";
 
 export function initialAccessStatus(email: string | null | undefined, managerEmail: string) : AccessStatus {
   return email?.trim().toLowerCase() === managerEmail.trim().toLowerCase() ? "approved" : "pending";

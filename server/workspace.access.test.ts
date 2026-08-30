@@ -4,7 +4,10 @@ vi.mock("./db", () => ({
   getMembershipsForUser: vi.fn(),
   getGroupWorkspace: vi.fn(),
   setDeliverableStatus: vi.fn(),
+  removeParticipantFromGroup: vi.fn(),
 }));
+
+vi.mock("./accessStore", () => ({ getAccessStatusForUser: vi.fn().mockResolvedValue("approved") }));
 
 import * as db from "./db";
 import { workspaceRouter } from "./routers/workspace";
@@ -26,6 +29,7 @@ describe("controle de acesso do espaço de trabalho", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(db.setDeliverableStatus).mockResolvedValue(undefined);
+    vi.mocked(db.removeParticipantFromGroup).mockResolvedValue(undefined);
   });
 
   it("bloqueia a submissão de integrante sem papel de dirigente ou relator", async () => {
@@ -57,5 +61,16 @@ describe("controle de acesso do espaço de trabalho", () => {
     await expect(caller.setDeliverableStatus({ groupId: 1, type: "ficha_guerra_hibrida", status: "submetido", checklistConfirmed: true }))
       .resolves.toEqual({ success: true });
     expect(db.setDeliverableStatus).toHaveBeenCalledWith(expect.objectContaining({ groupId: 1, status: "submetido", userId: 42 }));
+  });
+
+  it("permite a administradores remover um vínculo de GT sem apagar o usuário", async () => {
+    const caller = workspaceRouter.createCaller(contextFor("admin"));
+    await expect(caller.admin.removeParticipant({ groupId: 1, userId: 9 })).resolves.toEqual({ success: true });
+    expect(db.removeParticipantFromGroup).toHaveBeenCalledWith({ groupId: 1, userId: 9 });
+  });
+
+  it("impede que participante comum remova vínculos de GT", async () => {
+    const caller = workspaceRouter.createCaller(contextFor("user"));
+    await expect(caller.admin.removeParticipant({ groupId: 1, userId: 9 })).rejects.toMatchObject({ code: "FORBIDDEN" });
   });
 });

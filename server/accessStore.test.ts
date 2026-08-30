@@ -10,7 +10,7 @@ vi.mock("./_core/env", () => ({ ENV: { managerEmail: "gestor@example.com" } }));
 vi.mock("./_core/firebaseAdmin", () => ({ getFirebaseFirestore: mocks.getFirestore }));
 vi.mock("./email", () => ({ buildManagerRequestEmail: mocks.buildManagerRequestEmail, buildWelcomeApprovalEmail: vi.fn(), sendTransactionalEmail: mocks.sendTransactionalEmail }));
 
-import { resendAccessRequestNotification } from "./accessStore";
+import { resendAccessRequestNotification, revokeAccessRequest } from "./accessStore";
 
 describe("reenvio de notificação de acesso", () => {
   beforeEach(() => {
@@ -36,5 +36,27 @@ describe("reenvio de notificação de acesso", () => {
 
     await expect(resendAccessRequestNotification("usuario-1", "https://genbrasil.manus.space")).rejects.toThrow("Somente solicitações pendentes");
     expect(mocks.sendTransactionalEmail).not.toHaveBeenCalled();
+  });
+
+  it("marca o acesso como revogado sem apagar a solicitação original", async () => {
+    const update = vi.fn().mockResolvedValue(undefined);
+    const get = vi.fn().mockResolvedValue({ exists: true, data: () => ({ uid: "usuario-1", name: "Participante", email: "participante@example.com", status: "approved", requestedAt: "2026-08-30T00:00:00.000Z" }) });
+    mocks.getFirestore.mockReturnValue({ collection: () => ({ doc: () => ({ get, update }) }) });
+
+    const result = await revokeAccessRequest({ uid: "usuario-1", name: "Participante", email: "participante@example.com" }, "gestor@example.com");
+
+    expect(update).toHaveBeenCalledWith(expect.objectContaining({ status: "revoked", revokedBy: "gestor@example.com" }));
+    expect(result).toMatchObject({ uid: "usuario-1", status: "revoked", revokedBy: "gestor@example.com" });
+  });
+
+  it("cria um registro revogado para preservar a trilha de uma conta sem solicitação prévia", async () => {
+    const set = vi.fn().mockResolvedValue(undefined);
+    const get = vi.fn().mockResolvedValue({ exists: false });
+    mocks.getFirestore.mockReturnValue({ collection: () => ({ doc: () => ({ get, set }) }) });
+
+    const result = await revokeAccessRequest({ uid: "legado-1", name: "Conta legada", email: "legado@example.com" }, "gestor@example.com");
+
+    expect(set).toHaveBeenCalledWith(expect.objectContaining({ uid: "legado-1", status: "revoked", email: "legado@example.com" }));
+    expect(result).toMatchObject({ uid: "legado-1", status: "revoked" });
   });
 });

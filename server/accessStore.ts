@@ -14,6 +14,8 @@ export type AccessRequest = {
   requestedAt: string;
   approvedAt: string | null;
   approvedBy: string | null;
+  revokedAt?: string | null;
+  revokedBy?: string | null;
 };
 
 function firebaseUid(user: User) {
@@ -29,6 +31,8 @@ function asAccessRequest(uid: string, user: User, data: Partial<AccessRequest>):
     requestedAt: data.requestedAt ?? new Date().toISOString(),
     approvedAt: data.approvedAt ?? null,
     approvedBy: data.approvedBy ?? null,
+    revokedAt: data.revokedAt ?? null,
+    revokedBy: data.revokedBy ?? null,
   };
 }
 
@@ -56,9 +60,12 @@ export async function resendAccessRequestNotification(uid: string, siteUrl: stri
   return sendTransactionalEmail({ to: ENV.managerEmail, ...message });
 }
 
-export async function listPendingAccessRequests() {
-  const snapshot = await getFirebaseFirestore().collection(collectionName).where("status", "==", "pending").get();
-  return snapshot.docs.map(doc => doc.data() as AccessRequest).sort((a, b) => b.requestedAt.localeCompare(a.requestedAt));
+export async function listAccessRequestsForReview() {
+  const snapshot = await getFirebaseFirestore().collection(collectionName).get();
+  return snapshot.docs
+    .map(doc => doc.data() as AccessRequest)
+    .filter(request => request.status === "pending" || request.status === "revoked")
+    .sort((a, b) => b.requestedAt.localeCompare(a.requestedAt));
 }
 
 export async function approveAccessRequest(uid: string, approver: User, siteUrl: string) {
@@ -66,6 +73,7 @@ export async function approveAccessRequest(uid: string, approver: User, siteUrl:
   const snapshot = await ref.get();
   if (!snapshot.exists) throw new Error("Solicitação de acesso não encontrada.");
   const request = snapshot.data() as AccessRequest;
+  if (request.status !== "pending") throw new Error("Somente solicitações pendentes podem ser aprovadas.");
   const approvedAt = new Date().toISOString();
   await ref.update({ status: "approved", approvedAt, approvedBy: approver.email ?? approver.name ?? "Coordenação" });
   const approved = { ...request, status: "approved" as const, approvedAt, approvedBy: approver.email ?? approver.name ?? "Coordenação" };
@@ -74,4 +82,25 @@ export async function approveAccessRequest(uid: string, approver: User, siteUrl:
     await sendTransactionalEmail({ to: approved.email, ...message });
   }
   return approved;
+}
+
+export async function revokeAccessRequest(subject: { uid: string; name: string | null; email: string | null }, revokedBy: string) {
+  const ref = getFirebaseFirestore().collection(collectionName).doc(subject.uid);
+  const snapshot = await ref.get();
+  const revokedAt = new Date().toISOString();
+  if (!snapshot.exists) {
+    const request: AccessRequest = { uid: subject.uid, name: subject.name, email: subject.email, status: "revoked", requestedAt: revokedAt, approvedAt: null, approvedBy: null, revokedAt, revokedBy };
+    await ref.set(request);
+    return request;
+  }
+  const request = snapshot.data() as AccessRequest;
+  if (request.status === "revoked") throw new Error("O acesso desta conta já está revogado.");
+  await ref.update({ status: "revoked", revokedAt, revokedBy });
+  return { ...request, status: "revoked" as const, revokedAt, revokedBy };
+}
+
+export async function getAccessStatusForUser(user: User): Promise<AccessStatus | null> {
+  const snapshot = await getFirebaseFirestore().collection(collectionName).doc(firebaseUid(user)).get();
+  if (!snapshot.exists) return null;
+  return (snapshot.data() as AccessRequest).status;
 }

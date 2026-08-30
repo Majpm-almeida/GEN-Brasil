@@ -11,5 +11,6 @@ describe("política de aprovação de acesso", () => {
     expect(canEnterPlatform("approved")).toBe(true);
     expect(canEnterPlatform("pending")).toBe(false);
     expect(canEnterPlatform("rejected")).toBe(false);
+    expect(canEnterPlatform("revoked")).toBe(false);
   });
 });

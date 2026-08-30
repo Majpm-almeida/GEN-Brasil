@@ -57,3 +57,10 @@
 - [x] Adicionar controles administrativos para remover vínculo de GT e revogar acesso de participante.
 - [x] Criar testes das permissões, da revogação e da remoção de vínculo, além de verificar a interface atualizada.
 - [x] Exibir em Contas disponíveis os GTs vinculados, os papéis e os cursos de origem de cada participante.
+- [x] Substituir os resumos de informação disponível e limite da evidência dos eventos por transcrições completas e fiéis da Coletânea.
+- [x] Incluir a janela DESCRIÇÃO COMPLETA com o texto integral do Caso de Estudo: Minerais Críticos, Autonomia e Poder Nacional.
+- [x] Incluir a janela REGRAS com abas para realidade e hipótese, uso dos eventos e mapa de lentes ao longo da semana.
+- [x] Validar a fidelidade do conteúdo e as janelas de consulta no ambiente de desenvolvimento.
+- [ ] Publicar a atualização da base completa do exercício.
+- [x] Corrigir o erro de importação/exportação listPendingAccessRequests no servidor de desenvolvimento e confirmar a inicialização sem erros de runtime.
+- [x] Revalidar a tela Base do caso, os oito eventos completos e as janelas DESCRIÇÃO COMPLETA e REGRAS após eliminar o erro de runtime.

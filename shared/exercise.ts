@@ -74,72 +74,132 @@ export const caseContext = {
     "Os acontecimentos hipotéticos devem ser testados com prudência. Simultaneidade, benefício, correlação ou gravidade isolada não demonstram autoria, sincronização ou instrumentalização.",
 };
 
+export const caseDescription = {
+  strategicContext: [
+    "Em agosto de 2026, a geopolítica dos minerais críticos combina transição energética, digitalização, inteligência artificial, indústria de defesa e segurança econômica. A Agência Internacional de Energia registra que as cadeias de processamento e refino continuam altamente concentradas: em 2025, China e Indonésia responderam por mais de três quartos do crescimento recente do fornecimento refinado dos principais minerais energéticos, e a China permanece como principal refinadora da maioria dos minerais analisados. Para alguns insumos — como gálio, grafita, manganês e terras raras — a participação do principal refinador supera 90%. Essa concentração transforma capacidade de processamento, tecnologia, acesso a mercados e segurança de suprimento em temas de competição estratégica, e não apenas de comércio de commodities (IEA, 2026).",
+    "O Brasil entra nessa disputa com vantagens geológicas e com o desafio de transformar recurso mineral em capacidade econômica, tecnológica e estratégica. A ANM destaca a relevância brasileira em lítio, níquel, cobre, nióbio, manganês e grafita e o potencial geológico em terras raras, com ocorrências importantes em Minas Gerais, Goiás, Pará, Bahia e Amazonas (ANM, 2026). Em julho de 2026, o Plano Nacional de Mineração 2050 passou a orientar a política mineral de longo prazo, enfatizando segurança de suprimento, agregação de valor, competitividade, sustentabilidade e soberania (MME, 2026e). O MME também mantém o Minerais Críticos do Brasil: Guia para Investidores Estrangeiros 2026 (MME, 2026c), enquanto BNDES e Finep apoiam projetos de transformação mineral, P,D&I e manufatura associada às cadeias estratégicas (BNDES; FINEP, 2025).",
+    "No plano externo, o Brasil procura diversificar parceiros e preservar liberdade de ação. Em 2025-2026, o MME manteve ou ampliou agendas de cooperação mineral com a China, os Estados Unidos, a União Europeia, a Índia e o Japão. A cooperação com a China inclui o Plano de Ação de Cooperação Brasil-China para o Desenvolvimento Sustentável da Mineração 2025-2026 (MME, 2025). Com os Estados Unidos, houve diálogo específico sobre minerais críticos e estratégicos em maio de 2026 (MME, 2026d). Com a União Europeia, a agenda de 2026 inclui investimentos e cadeias de valor relacionadas a minerais críticos (MME, 2026a). Brasil e Índia estabeleceram cooperação no campo de elementos e terras raras e minerais críticos (MME, 2026b). A parceria Brasil-Japão prevê aprofundamento da cooperação em áreas estratégicas no período 2025-2030 (BRASIL; JAPÃO, 2025). Esses movimentos devem ser compreendidos, no exercício, como manifestações legítimas da competição e da cooperação internacional por diversificação de suprimentos, tecnologia, financiamento e inserção em cadeias de maior valor agregado.",
+    "Para a Grande Estratégia Nacional, a questão central é como converter essa posição mineral em autonomia e capacidade nacional sem cair em dois extremos: tratar todo interesse estrangeiro como ameaça ou, no sentido oposto, reduzir os minerais críticos a uma oportunidade puramente comercial. O Brasil precisa conciliar atração de capital e tecnologia, agregação de valor no território nacional, proteção de conhecimento sensível, sustentabilidade, direitos de comunidades, rastreabilidade, repressão a ilícitos, diversificação de parceiros e resiliência de infraestrutura. É nesse ambiente real que se insere o Caso de Estudo semirrealista abaixo.",
+  ],
+  realActors: [
+    ["Brasil — MME/SNGM, ANM e SGB", "Formulação da política mineral, regulação, conhecimento geológico, licenciamento minerário e produção de dados para decisão. O PNM 2050 e o Guia 2026 reforçam segurança de suprimento, agregação de valor e atração de investimentos."],
+    ["Brasil — BNDES e Finep", "Instrumentos de financiamento e apoio à transformação de minerais estratégicos, P,D&I e manufatura associada às cadeias de valor."],
+    ["Brasil — MRE, MD e demais órgãos competentes", "Dimensões diplomática, de defesa, segurança, inteligência, fronteiras, proteção de infraestrutura e cooperação internacional, conforme competências legais."],
+    ["China / National Development and Reform Commission — NDRC", "Parceiro econômico relevante e ator central nas cadeias globais de processamento/refino. Brasil e China mantêm cooperação formal para o desenvolvimento sustentável da mineração."],
+    ["Estados Unidos", "Política de segurança de suprimentos e diversificação de cadeias; diálogo bilateral com o Brasil sobre minerais críticos e estratégicos em 2026."],
+    ["União Europeia / Comissão Europeia", "Busca diversificação de matérias-primas críticas e investimentos em cadeias sustentáveis; agenda com o Brasil inclui lítio, níquel e terras raras."],
+    ["Índia e Japão", "Parceiros adicionais de diversificação, tecnologia, investimento e cooperação em minerais críticos/estratégicos."],
+  ],
+  brazilianFramework: [
+    ["MME / SNGM / CNPM / ANM / SGB", "Política mineral, planejamento, regulação, fiscalização, conhecimento geológico e desenvolvimento da cadeia de minerais críticos e estratégicos."],
+    ["MRE", "Política externa, negociação, diversificação de parcerias, cooperação internacional e defesa de interesses brasileiros no plano externo."],
+    ["MD / Forças Armadas", "Defesa Nacional e contribuição, nos limites constitucionais e legais, para proteção de interesses estratégicos, vigilância, inteligência, logística e apoio quando cabível."],
+    ["GSI / SISBIN", "Avaliação, integração e compartilhamento de informações sobre riscos estratégicos e ameaças que afetem interesses nacionais, observadas as competências institucionais."],
+    ["MJSP / PF e órgãos de segurança", "Enfrentamento ao crime organizado, ilícitos federais, lavagem de ativos, contrabando e delitos transnacionais, inclusive por cooperação policial e judicial."],
+    ["MCTI / MDIC / BNDES / Finep e sistema de inovação", "Tecnologia, industrialização, adensamento produtivo, financiamento, P,D&I, redução de dependências e aumento de valor agregado."],
+  ],
+  fictionalActors: [
+    ["Projeto Horizonte", "Projeto de terras raras em Goiás, com pesquisa mineral avançada e plano de instalar unidade piloto de beneficiamento e separação no Brasil. Busca capital, tecnologia e contratos de compra futura."],
+    ["Lítio Aurora S.A.", "Empresa brasileira fictícia com operação de lítio em Minas Gerais e projeto de conversão química para ampliar valor agregado no País."],
+    ["Tecnometais Brasil S.A.", "Empresa fictícia de processamento mineral na Bahia, dependente de equipamentos importados, sistemas digitais industriais e logística portuária."],
+    ["Instituto Caminhos do Cerrado", "Organização socioambiental fictícia que acompanha impactos, transparência e participação social no Projeto Horizonte. Atua por meios administrativos, judiciais e de comunicação pública."],
+    ["Rede Mercúrio", "Rede criminosa fictícia que opera mineração ilegal, contrabando, empresas de fachada e lavagem de recursos em mais de um país sul-americano."],
+    ["Perfis e operadores digitais não atribuídos", "Conjunto de contas, páginas e agentes cuja identidade, coordenação e eventual patrocínio não são conhecidos no início do exercício."],
+  ],
+};
+
 export const caseEvents = [
   {
     id: 1,
     title: "Pressão sobre sistemas e informação estratégica",
     evidence:
-      "Projeto Horizonte, Lítio Aurora S.A. e Tecnometais Brasil S.A. registram tentativas de acesso não autorizado a redes corporativas, contas de executivos, dados geológicos, repositórios técnicos e sistemas industriais, em período de negociações com investidores e compradores estrangeiros.",
+      "Entre junho e agosto de 2026, Projeto Horizonte, Lítio Aurora S.A. e Tecnometais Brasil S.A. registram aumento de tentativas de acesso não autorizado a redes corporativas, contas de executivos, dados geológicos e repositórios técnicos. No Projeto Horizonte, um fornecedor detecta tentativa de obtenção de arquivos sobre ensaios de separação de terras raras; na Lítio Aurora, credenciais de um gerente são comprometidas; na Tecnometais Brasil, há varreduras sobre sistemas industriais. Os três incidentes ocorrem em período de maior negociação com investidores e compradores estrangeiros.",
     limitation:
-      "Não há atribuição técnica conclusiva nem prova de operador comum. Os fatos admitem explicações como espionagem econômica, criminalidade cibernética, coleta oportunista ou preparação de campanha coordenada.",
+      "Não há atribuição técnica conclusiva nem prova de operador comum. Os fatos são compatíveis com espionagem econômica, criminalidade cibernética, coleta oportunista ou preparação de campanha coordenada. A coincidência temporal com negociações internacionais não demonstra nexo causal.",
   },
   {
     id: 2,
     title: "Ambiente informacional e disputa de narrativas",
     evidence:
-      "Redes sociais e canais digitais ampliam conteúdos sobre soberania mineral, risco ambiental, capital estrangeiro e agregação de valor. Parte do conteúdo usa dados verdadeiros; outra parte apresenta informações desatualizadas, imagens fora de contexto e alegações não verificadas.",
+      "Nas semanas seguintes, redes sociais e canais digitais ampliam conteúdos sobre 'entrega do patrimônio mineral', risco ambiental, dependência de capital estrangeiro, suposta exportação de minério sem agregação de valor e eventual perda de soberania. Parte das publicações utiliza dados verdadeiros do setor; outras misturam informações desatualizadas, imagens fora de contexto e alegações não verificadas. Também circulam críticas opostas, acusando movimentos socioambientais de atuarem contra o desenvolvimento nacional. Alguns conteúdos alcançam influenciadores e páginas sediadas fora do Brasil.",
     limitation:
-      "Não se sabe se existe coordenação ou patrocínio comum. Há debate doméstico e estrangeiro legítimo; alcance, polarização ou origem externa de conteúdo não provam operação coordenada de influência.",
+      "Não se sabe se existe coordenação, patrocínio comum ou apenas reprodução orgânica de narrativas. Há atores domésticos e estrangeiros no debate, e crítica política, ambiental ou econômica é legítima. Alcance, polarização ou origem externa de conteúdo não provam operação de influência coordenada.",
   },
   {
     id: 3,
     title: "Competição econômica e negociação externa",
     evidence:
-      "Parceiros como China, Estados Unidos, União Europeia, Índia e Japão apresentam manifestações públicas de interesse e cooperação. Grupos empresariais oferecem financiamento, contratos de compra futura, transferência tecnológica, processamento local e cláusulas comerciais distintas.",
+      "No mesmo período, o governo brasileiro recebe manifestações de interesse e propostas de cooperação relacionadas a minerais críticos provenientes de parceiros como China, Estados Unidos, União Europeia, Índia e Japão, coerentes com agendas reais de diversificação de suprimentos, investimentos e tecnologia. No caso, grupos empresariais ligados a diferentes mercados apresentam ao Projeto Horizonte e à Lítio Aurora alternativas de financiamento, contratos de compra futura, transferência tecnológica, processamento local e cláusulas de preferência comercial. As propostas diferem quanto a conteúdo local, propriedade intelectual, garantias de fornecimento, padrões ambientais e acesso a produtos processados.",
     limitation:
-      "Atuação pública, negociação dura, interesse por exclusividade e melhores condições comerciais não constituem, por si sós, coerção, ameaça híbrida ou Lawfare. É necessário separar competição legítima de eventual instrumentalização.",
+      "A atuação é pública e, em princípio, legítima. Negociação dura, busca por exclusividade, defesa de interesses nacionais estrangeiros ou tentativa de obter melhores condições comerciais não constituem por si só coerção, ameaça híbrida ou Lawfare. O GT deve separar competição estratégica legítima de eventual instrumentalização de outros meios.",
   },
   {
     id: 4,
     title: "Controvérsias jurídicas e regulatórias",
     evidence:
-      "O Instituto Caminhos do Cerrado, associações locais e representantes de comunidades apresentam requerimentos administrativos e ações judiciais sobre licenciamento, impactos, transparência, consulta e medidas compensatórias. Uma fundação estrangeira financia campanha pública de educação socioambiental.",
+      "O Instituto Caminhos do Cerrado, associações locais e representantes de comunidades apresentam requerimentos administrativos e ações judiciais sobre licenciamento, estudos de impacto, transparência, consulta e medidas compensatórias relativas ao Projeto Horizonte. Parte das alegações é considerada tecnicamente consistente por especialistas independentes; outras são contestadas pela empresa. Paralelamente, uma fundação estrangeira financia campanha pública de educação socioambiental do Instituto, e mensagens de redes sociais associam o litígio a narrativas sobre soberania mineral.",
     limitation:
-      "Não há prova de financiamento direto do litígio, direção externa da estratégia jurídica, fraude processual ou coordenação com governos ou empresas estrangeiras. Deve-se distinguir uso legítimo do Direito, litigância estratégica legítima e eventual instrumentalização.",
+      "Não há prova de que o financiamento externo tenha custeado as ações judiciais, de que o financiador dite estratégia jurídica, de fraude processual ou de coordenação com governos/empresas estrangeiras. O exercício exige distinguir uso legítimo do Direito, litigância estratégica legítima e possível instrumentalização.",
   },
   {
     id: 5,
     title: "Criminalidade transnacional",
     evidence:
-      "A Polícia Federal, em cooperação com autoridades de dois países sul-americanos, identifica a Rede Mercúrio: organização fictícia que utiliza mineração ilegal, documentos falsos, empresas de fachada, transporte terrestre e fluvial e contas de terceiros em mais de uma jurisdição.",
+      "A Polícia Federal, em cooperação com autoridades de dois países sul-americanos, identifica a Rede Mercúrio, organização fictícia que utiliza frentes de mineração ilegal, documentos falsos, empresas de fachada, transporte terrestre e fluvial e contas de terceiros para inserir minério de origem ilícita em cadeias legais. Há indícios de contrabando, lavagem de recursos e aquisição de equipamentos em diferentes jurisdições. Parte dos fluxos passa por áreas de fronteira e hubs logísticos usados também por atividades lícitas.",
     limitation:
-      "A transnacionalidade está demonstrada para o exercício, mas não há evidência de que a Rede Mercúrio atue a serviço de governo estrangeiro, empresa real, Projeto Horizonte ou campanha híbrida.",
+      "A transnacionalidade da rede está suficientemente demonstrada para o exercício. Não há evidência de que a Rede Mercúrio atue a serviço de governo estrangeiro, empresa real, Projeto Horizonte ou campanha híbrida. A existência de crime organizado transnacional não comprova uso instrumental por ator estatal.",
   },
   {
     id: 6,
     title: "Vulnerabilidades de infraestrutura e logística",
     evidence:
-      "A expansão dos projetos revela dependência de corredores rodoviários e ferroviários, energia contínua, conectividade, equipamentos importados e poucos pontos de escoamento. Há falha técnica, furto de cabos e risco de indisponibilidade de peças críticas.",
+      "A expansão dos três projetos fictícios revela dependência de corredores rodoviários e ferroviários, energia contínua, conectividade, equipamentos importados e poucos pontos de escoamento. Uma subestação que atende Tecnometais Brasil sofre falha técnica; um trecho logístico usado por Lítio Aurora registra furto de cabos; e o Projeto Horizonte identifica risco de indisponibilidade de peças críticas importadas. Nenhum episódio causa paralisação prolongada, mas os relatórios internos apontam baixa redundância em alguns serviços.",
     limitation:
-      "As vulnerabilidades são reais no caso, porém não existe padrão comprovado de sabotagem. Falhas, furtos e dependências estruturais não demonstram exploração adversária.",
+      "As vulnerabilidades são reais dentro do caso, porém não há padrão comprovado de sabotagem. Falhas, furtos e dependências estruturais podem existir sem ação adversária. O GT deve distinguir vulnerabilidade explorável de exploração efetivamente demonstrada.",
   },
   {
     id: 7,
     title: "Coordenação estatal ainda incompleta no caso",
     evidence:
-      "Um arranjo interagências temporário reúne áreas de mineração, relações exteriores, defesa, segurança pública, inteligência, meio ambiente, indústria, ciência e tecnologia e finanças, mas ainda não possui quadro comum de indicadores para diferenciar riscos e fenômenos.",
+      "Diante da simultaneidade dos fatos, é criado para o exercício um arranjo interagências temporário que reúne representantes das áreas de mineração, relações exteriores, defesa, segurança pública, inteligência, meio ambiente, indústria, ciência e tecnologia e finanças. Na primeira rodada de reuniões, os órgãos dispõem de bases de dados, critérios de risco e temporalidades diferentes. Alguns tratam os fatos como questões setoriais; outros defendem análise integrada. Ainda não existe quadro comum de indicadores para diferenciar competição legítima, crime, vulnerabilidade, influência, espionagem econômica e possível ação coordenada.",
     limitation:
-      "A dificuldade de coordenação é hipótese do caso e não avaliação sobre órgãos reais. A coordenação estatal incompleta pode aumentar o tempo de resposta, mas não prova coordenação adversária.",
+      "Essa dificuldade é uma condição hipotética do caso, não uma avaliação sobre o desempenho real dos órgãos brasileiros. Falta de coordenação do Estado não é prova de coordenação adversária, mas pode aumentar tempo de resposta e dificultar atribuição.",
   },
   {
     id: 8,
     title: "Convergência de efeitos, mas não de autoria",
     evidence:
-      "Coexistem incidentes cibernéticos, disputa de narrativas, competição por financiamento e tecnologia, controvérsias jurídicas, crime transnacional e vulnerabilidades de infraestrutura. Alguns efeitos podem favorecer agentes distintos ou decorrer da maior visibilidade estratégica do setor.",
+      "Ao final de agosto de 2026, decisores recebem um quadro em que coexistem: incidentes cibernéticos sobre ativos de conhecimento; disputa intensa de narrativas; competição por financiamento, tecnologia e contratos de fornecimento; controvérsias jurídicas; crime organizado transnacional; e vulnerabilidades de infraestrutura. Alguns efeitos podem favorecer concorrentes, grupos políticos, agentes econômicos ou redes criminosas distintas. Outros podem ser apenas consequência do aumento da visibilidade estratégica do setor mineral brasileiro.",
     limitation:
-      "Não há prova de comando único, sincronização entre todos os eventos ou objetivo estratégico comum. Benefício, simultaneidade e convergência de efeitos não bastam para atribuição.",
+      "Não há, no material inicial, prova de comando único, sincronização entre todos os eventos ou objetivo estratégico comum. Benefício, simultaneidade e convergência de efeitos não bastam para atribuição. A tarefa do GT é decidir o que está caracterizado, o que permanece hipótese plausível e o que não se sustenta com as evidências disponíveis.",
   },
 ];
+
+export const exerciseRules = {
+  separation: [
+    "Os atores reais acima definem o ambiente geopolítico e institucional. Os atores fictícios dão materialidade aos fatos do exercício. Nenhum evento hipotético deve ser usado para inferir, insinuar ou atribuir conduta indevida à China, aos Estados Unidos, à União Europeia, à Índia, ao Japão, a órgãos brasileiros ou a empresas reais. Quando um país ou bloco real aparecer no caso, sua atuação será descrita apenas em termos públicos e legítimos de diplomacia, investimento, regulação, cooperação ou competição econômica.",
+    "O contexto geopolítico e institucional foi construído a partir de fatos e agendas públicas de 2025-2026. Os incidentes, vínculos, financiamentos, campanhas, litígios, operações criminosas e eventuais conexões entre instrumentos são HIPOTÉTICOS. Os atores reais são usados somente para representar interesses e políticas publicamente documentados; qualquer conduta potencialmente ilícita ou hostil recai exclusivamente sobre atores fictícios ou não atribuídos.",
+  ],
+  useEvents: [
+    "Os eventos hipotéticos constituem a BASE EMPÍRICA COMUM E PERMANENTE do exercício. Eles não são atividades separadas e não representam, isoladamente, Guerra Híbrida, Lawfare ou Segurança Transnacional. Em cada dia, o GT retorna ao mesmo conjunto de acontecimentos, seleciona os que forem pertinentes à lente do dia e os submete aos critérios da microleitura e do teste correspondente. O mesmo evento pode ser utilizado em dias diferentes, desde que a relação seja explicada e a evidência disponível não seja extrapolada.",
+    "Nos três primeiros dias, o trabalho deve seguir a sequência: PALESTRA TEMÁTICA → MICROLEITURA DE CONSOLIDAÇÃO → CASO DE ESTUDO E EVENTOS HIPOTÉTICOS → TESTE DOS ELEMENTOS CONSTITUTIVOS → FICHA-SÍNTESE → INTEGRAÇÃO.",
+  ],
+  stages: [
+    ["Caso de estudo", "Define o contexto estratégico comum.", "Em que ambiente o Brasil está tomando decisões?"],
+    ["Eventos hipotéticos", "Fornecem fatos, indícios, limitações e pontos que ainda precisam ser esclarecidos.", "Que dados estão realmente disponíveis ao GT?"],
+    ["Microleitura", "Oferece a lente conceitual do dia.", "Que conceito e que distinções devemos usar?"],
+    ["Teste", "Transforma o conceito em critérios verificáveis.", "Quais elementos estão presentes, ausentes ou com evidência insuficiente?"],
+    ["Ficha-Síntese", "Registra a conclusão analítica e as respostas.", "Como classificamos o fenômeno e o que recomendamos?"],
+    ["Integração", "Combina os resultados sem apagar as incertezas.", "O que está caracterizado, o que é hipótese e como isso orienta a estratégia?"],
+  ],
+  lensMap: [
+    ["31 ago. — Guerra Híbrida", "1, 2, 3, 6, 7 e 8", "Testar pluralidade de instrumentos, vulnerabilidades, possível sincronização e objetivo estratégico comum. Os eventos não são, isoladamente, 'atos de GH'."],
+    ["1º set. — Lawfare", "4; apoio de 2, 3 e 8", "Usar o Evento 4 como núcleo do teste jurídico. Eventos 2, 3 e 8 somente entram se houver nexo demonstrável com a controvérsia jurídica."],
+    ["2 set. — Segurança Transnacional", "5; apoio de 1 e 6 se houver dimensão transfronteiriça", "O Evento 5 é o principal dado de transnacionalidade. Outros eventos só devem ser incluídos se o GT demonstrar fluxos, atores, jurisdições ou efeitos além-fronteiras."],
+    ["3 set. — Integração", "Todos os eventos, conforme pertinência específica do GT e Missão de Aprofundamento", "Reutilizar os eventos já analisados para responder à Missão de Aprofundamento distinguindo fatos demonstrados, relações possíveis, hipóteses e pontos que ainda precisam ser esclarecidos."],
+  ],
+  note: "IMPORTANTE: a indicação de 'eventos prioritários' é um guia de trabalho, não uma lista fechada. Um GT poderá usar outro evento se justificar sua pertinência com base nos critérios do tema.",
+};
 
 export type TestCriterion = {
   id: string;

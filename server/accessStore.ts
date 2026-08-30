@@ -68,6 +68,9 @@ export async function listAccessRequestsForReview() {
     .sort((a, b) => b.requestedAt.localeCompare(a.requestedAt));
 }
 
+/** Compatibilidade com carregamentos em cache de versões anteriores do roteador. */
+export const listPendingAccessRequests = listAccessRequestsForReview;
+
 export async function approveAccessRequest(uid: string, approver: User, siteUrl: string) {
   const ref = getFirebaseFirestore().collection(collectionName).doc(uid);
   const snapshot = await ref.get();

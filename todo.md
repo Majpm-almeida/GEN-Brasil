@@ -101,10 +101,10 @@
 - [x] Publicar e confirmar no ambiente público a aplicação efetiva da nova largura das janelas.
 - [x] Gerar e baixar em PDF o Caso de Estudo a partir do botão Imprimir caso.
 - [x] Gerar e baixar em PDF as Regras de utilização a partir do botão Imprimir regras.
-- [ ] Criar testes, publicar e validar manualmente os downloads de PDF.
+- [x] Criar testes, publicar e validar manualmente os downloads de PDF.
 - [x] Criar commit e enviar ao GitHub as atualizações recentes da Base do caso, colaboração, relatório consolidado e correções de navegação.
 - [x] Ajustar o botão do diálogo DESCRIÇÃO COMPLETA para manter o rótulo obrigatório Imprimir caso e disparar o download do PDF.
 - [x] Ajustar o botão do diálogo REGRAS para manter o rótulo obrigatório Imprimir regras e disparar o download do PDF.
 - [x] Adicionar teste de regressão verificando os rótulos Imprimir caso e Imprimir regras associados à geração/download de PDF.
 - [x] Ajustar os textos corridos dos PDFs para respeitarem margens laterais simétricas e alinhamento justificado.
-- [ ] Cobrir a justificação tipográfica em teste, publicar e validar manualmente os PDFs atualizados.
+- [x] Cobrir a justificação tipográfica em teste, publicar e validar manualmente os PDFs atualizados.

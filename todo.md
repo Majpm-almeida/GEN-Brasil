@@ -119,9 +119,9 @@
 - [x] Incluir no PDF do Relatório do GT a identificação institucional, os metadados de participantes e os quadros de teste por lente conforme o modelo aprovado.
 - [x] Adicionar caixas de seleção para escolher as Fichas-Síntese que devem compor o Relatório do GT em PDF.
 - [x] Filtrar a composição do PDF para incluir exclusivamente as fichas selecionadas pelo usuário.
-- [ ] Criar testes, publicar e validar manualmente a seleção de fichas do relatório.
+- [x] Criar testes, publicar e validar manualmente a seleção de fichas do relatório.
 - [x] Verificar o acesso e esclarecer a localização dos seis parágrafos da Síntese Estratégica Integrada.
 - [x] Ajustar o Relatório do GT para gerar exclusivamente as Fichas-Síntese selecionadas, sem síntese, slides ou anexos.
 - [x] Adicionar ao quadro de Síntese Estratégica Integrada o botão GERAR PDF da Síntese com download do documento dos seis blocos.
 - [x] Adicionar ao quadro Apresentação final o botão GERAR PDF da Apresentação com download acadêmico dos quatro slides.
-- [ ] Criar testes, publicar e validar manualmente os três fluxos de exportação independentes.
+- [x] Criar testes, publicar e validar manualmente os três fluxos de exportação independentes.

@@ -112,7 +112,7 @@
 - [x] Adicionar em cada item do Teste Analítico o campo RESULTADO com as opções Satisfeito, Parcial, Não satisfeito e Insuficiente.
 - [x] Persistir os resultados analíticos e incorporá-los à composição consolidada do Relatório do GT.
 - [x] Corrigir o botão Gerar Relatório em PDF para baixar um documento completo conforme a estrutura de referência.
-- [ ] Criar testes, publicar e validar manualmente os resultados e o download do Relatório do GT em PDF.
+- [x] Criar testes, publicar e validar manualmente os resultados e o download do Relatório do GT em PDF.
 - [x] Produzir mockup visual isolado da Ficha-Síntese com eventos decisivos, resultado e teste de suficiência para aprovação do usuário.
 - [x] Adicionar a seleção condicionada de eventos decisivos entre as evidências mobilizadas de cada Ficha-Síntese.
 - [x] Separar por critério os registros de Aplicação aos eventos, Resultado e Teste de suficiência.

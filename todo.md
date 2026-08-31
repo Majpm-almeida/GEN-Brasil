@@ -106,3 +106,5 @@
 - [x] Ajustar o botão do diálogo DESCRIÇÃO COMPLETA para manter o rótulo obrigatório Imprimir caso e disparar o download do PDF.
 - [x] Ajustar o botão do diálogo REGRAS para manter o rótulo obrigatório Imprimir regras e disparar o download do PDF.
 - [x] Adicionar teste de regressão verificando os rótulos Imprimir caso e Imprimir regras associados à geração/download de PDF.
+- [x] Ajustar os textos corridos dos PDFs para respeitarem margens laterais simétricas e alinhamento justificado.
+- [ ] Cobrir a justificação tipográfica em teste, publicar e validar manualmente os PDFs atualizados.

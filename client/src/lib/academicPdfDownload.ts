@@ -3,8 +3,39 @@ import autoTable from "jspdf-autotable";
 import { jsPDF } from "jspdf";
 
 const MARGIN = 46;
+const PARAGRAPH_LINE_HEIGHT = 16;
 const BODY_COLOR: [number, number, number] = [49, 72, 97];
 const TITLE_COLOR: [number, number, number] = [21, 47, 79];
+
+function drawJustifiedLine(doc: jsPDF, line: string, x: number, y: number, availableWidth: number) {
+  const words = line.trim().split(/\s+/).filter(Boolean);
+  if (words.length < 2) {
+    doc.text(line, x, y);
+    return;
+  }
+
+  const wordsWidth = words.reduce((total, word) => total + doc.getTextWidth(word), 0);
+  const wordSpacing = (availableWidth - wordsWidth) / (words.length - 1);
+  if (wordSpacing <= 0) {
+    doc.text(line, x, y);
+    return;
+  }
+
+  let currentX = x;
+  words.forEach(word => {
+    doc.text(word, currentX, y);
+    currentX += doc.getTextWidth(word) + wordSpacing;
+  });
+}
+
+function drawJustifiedParagraph(doc: jsPDF, value: string, x: number, y: number, availableWidth: number) {
+  const lines = doc.splitTextToSize(value, availableWidth) as string[];
+  lines.forEach((line, index) => {
+    const isLastLine = index === lines.length - 1;
+    if (isLastLine) doc.text(line, x, y + index * PARAGRAPH_LINE_HEIGHT);
+    else drawJustifiedLine(doc, line, x, y + index * PARAGRAPH_LINE_HEIGHT, availableWidth);
+  });
+}
 
 function addFooter(doc: jsPDF) {
   const pages = doc.getNumberOfPages();
@@ -38,12 +69,12 @@ export function downloadAcademicPdf(document: AcademicPdfDocument) {
 
   const paragraph = (value: string) => {
     const lines = doc.splitTextToSize(value, contentWidth) as string[];
-    const height = Math.max(18, lines.length * 17) + 10;
+    const height = Math.max(18, lines.length * PARAGRAPH_LINE_HEIGHT) + 10;
     ensureSpace(height);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10.5);
+    doc.setFont("times", "normal");
+    doc.setFontSize(11);
     doc.setTextColor(...BODY_COLOR);
-    doc.text(lines, MARGIN, cursorY, { lineHeightFactor: 1.45 });
+    drawJustifiedParagraph(doc, value, MARGIN, cursorY, contentWidth);
     cursorY += height;
   };
 

@@ -1,0 +1,105 @@
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { downloadPresentationPdf, downloadSynthesisPdf } from "@/lib/synthesisPdfDownload";
+import { trpc } from "@/lib/trpc";
+import { cn } from "@/lib/utils";
+import { caseEvents, lenses, type WorksheetLens } from "@shared/exercise";
+import { CheckCircle2, Download, FileCheck2, Loader2, Presentation, Save } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+
+type SynthesisDraft = {
+  selectedEventIds: number[];
+  connectionNotes: string;
+  strategicJudgment: string;
+  lensResults: string;
+  connectionsAndLimits: string;
+  missionResponse: string;
+  recommendations: string;
+  desiredEndState: string;
+  slideOne: string;
+  slideTwo: string;
+  slideThree: string;
+  slideFour: string;
+};
+
+const emptySynthesis = (): SynthesisDraft => ({
+  selectedEventIds: [], connectionNotes: "", strategicJudgment: "", lensResults: "", connectionsAndLimits: "", missionResponse: "", recommendations: "", desiredEndState: "", slideOne: "", slideTwo: "", slideThree: "", slideFour: "",
+});
+
+function parseEventIds(value?: string | null) {
+  try {
+    const parsed = JSON.parse(value ?? "[]");
+    return Array.isArray(parsed) ? parsed.filter(item => typeof item === "number") : [];
+  } catch {
+    return [];
+  }
+}
+
+function wordCount(value: string) {
+  return value.trim() ? value.trim().split(/\s+/).length : 0;
+}
+
+function SectionField({ number, title, value, onChange, hint }: { number: string; title: string; value: string; onChange: (value: string) => void; hint: string }) {
+  return <div className="rounded-xl border border-border/75 bg-background/55 p-4 sm:p-5"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div className="flex gap-3"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-secondary text-xs font-bold text-primary">{number}</span><div><Label className="text-base font-semibold text-primary">{title}</Label><p className="mt-1 text-sm leading-6 text-muted-foreground">{hint}</p></div></div><span className="text-xs text-muted-foreground">{wordCount(value)} palavras</span></div><Textarea value={value} onChange={(event) => onChange(event.target.value)} className="mt-4 min-h-32 resize-y bg-card" placeholder="Redija o parágrafo analítico do GT." /></div>;
+}
+
+function SlideField({ number, title, value, onChange, hint }: { number: string; title: string; value: string; onChange: (value: string) => void; hint: string }) {
+  return <div className="rounded-xl border border-border/75 bg-background/55 p-5"><div className="flex items-center gap-3"><span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary font-serif text-sm font-bold text-primary-foreground">{number}</span><div><p className="font-semibold text-primary">Slide {number} · {title}</p><p className="mt-1 text-xs leading-5 text-muted-foreground">{hint}</p></div></div><Textarea value={value} onChange={(event) => onChange(event.target.value)} className="mt-4 min-h-32 bg-card" placeholder="Organize a mensagem essencial deste slide." /></div>;
+}
+
+function EventPicker({ selected, onChange }: { selected: number[]; onChange: (next: number[]) => void }) {
+  const toggle = (id: number) => onChange(selected.includes(id) ? selected.filter(item => item !== id) : [...selected, id].sort((a, b) => a - b));
+  return <div className="grid gap-2 sm:grid-cols-2">{caseEvents.map(event => <label key={event.id} className={cn("flex items-start gap-3 rounded-lg border p-3 text-sm transition-colors", selected.includes(event.id) ? "border-primary bg-secondary/55" : "border-border/80 bg-card hover:border-primary/30")}><Checkbox className="mt-0.5" checked={selected.includes(event.id)} onCheckedChange={() => toggle(event.id)} /><span><span className="font-semibold text-primary">Evento {event.id}</span><span className="ml-2 text-muted-foreground">{event.title}</span></span></label>)}</div>;
+}
+
+export function SynthesisEditorEnhanced({ activeGroupId }: { activeGroupId: number | null }) {
+  const { data: workspace, isLoading } = trpc.workspace.groupWorkspace.useQuery({ groupId: activeGroupId ?? 0 }, { enabled: Boolean(activeGroupId) });
+  const utils = trpc.useUtils();
+  const [draft, setDraft] = useState<SynthesisDraft>(emptySynthesis());
+  const synthesis = workspace?.synthesis;
+  const save = trpc.workspace.saveSynthesis.useMutation({
+    onSuccess: () => {
+      toast.success("Síntese integrada salva com êxito.");
+      utils.workspace.groupWorkspace.invalidate({ groupId: activeGroupId ?? 0 });
+    },
+    onError: error => toast.error(error.message),
+  });
+  useEffect(() => {
+    setDraft({ selectedEventIds: parseEventIds(synthesis?.selectedEventIds), connectionNotes: synthesis?.connectionNotes ?? "", strategicJudgment: synthesis?.strategicJudgment ?? "", lensResults: synthesis?.lensResults ?? "", connectionsAndLimits: synthesis?.connectionsAndLimits ?? "", missionResponse: synthesis?.missionResponse ?? "", recommendations: synthesis?.recommendations ?? "", desiredEndState: synthesis?.desiredEndState ?? "", slideOne: synthesis?.slideOne ?? "", slideTwo: synthesis?.slideTwo ?? "", slideThree: synthesis?.slideThree ?? "", slideFour: synthesis?.slideFour ?? "" });
+  }, [synthesis?.id, synthesis?.updatedAt]);
+  if (!activeGroupId) return <Card className="border-dashed bg-card/80"><CardContent className="p-8 text-center text-sm leading-6 text-muted-foreground">Selecione um Grupo de Trabalho para registrar a Síntese Estratégica Integrada.</CardContent></Card>;
+  if (isLoading || !workspace) return <div className="flex min-h-[260px] items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
+  const canFinalize = workspace.access.canFinalize;
+  const ready = Boolean(draft.strategicJudgment.trim() && draft.lensResults.trim() && draft.connectionsAndLimits.trim() && draft.missionResponse.trim() && draft.recommendations.trim() && draft.desiredEndState.trim() && draft.slideOne.trim() && draft.slideTwo.trim() && draft.slideThree.trim() && draft.slideFour.trim());
+  const update = <K extends keyof SynthesisDraft>(key: K, value: SynthesisDraft[K]) => setDraft(current => ({ ...current, [key]: value }));
+  const submit = (status: "rascunho" | "versao_final") => {
+    if (status === "versao_final" && !ready) {
+      toast.error("Para finalizar, preencha os seis blocos e os quatro slides.");
+      return;
+    }
+    save.mutate({ groupId: activeGroupId, ...draft, selectedEventIds: JSON.stringify(draft.selectedEventIds), status });
+  };
+  const generateSynthesisPdf = () => {
+    try {
+      downloadSynthesisPdf({ group: workspace.group, members: workspace.members, synthesis: draft });
+      toast.success("PDF da Síntese iniciado para download.");
+    } catch {
+      toast.error("Não foi possível gerar o PDF da Síntese. Tente novamente.");
+    }
+  };
+  const generatePresentationPdf = () => {
+    try {
+      downloadPresentationPdf({ group: workspace.group, synthesis: draft });
+      toast.success("PDF da Apresentação iniciado para download.");
+    } catch {
+      toast.error("Não foi possível gerar o PDF da Apresentação. Tente novamente.");
+    }
+  };
+  const worksheets = ["guerra_hibrida", "lawfare", "seguranca_transnacional"].map(key => ({ lens: lenses[key as WorksheetLens].label, status: workspace.worksheets.find((item: any) => item.lens === key)?.status ?? "pendente", classification: workspace.worksheets.find((item: any) => item.lens === key)?.classification ?? "Não registrada" }));
+  return <div className="space-y-6"><section className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]"><Card className="border-0 bg-primary text-primary-foreground shadow-[0_12px_35px_-24px_rgba(17,42,73,0.7)]"><CardContent className="p-6"><p className="text-xs font-bold uppercase tracking-[0.16em] text-amber-200">Missão de Aprofundamento · {workspace.group.code}</p><p className="mt-3 font-serif text-lg leading-8">{workspace.group.missionText}</p><p className="mt-3 text-sm leading-6 text-slate-100/80">A resposta à missão é o núcleo diferenciador do produto final e deve ocupar posição central no Slide 3.</p></CardContent></Card><Card className="border-0 bg-card/85 shadow-sm"><CardHeader className="pb-3"><p className="eyebrow">Consolidação prévia</p><CardTitle className="mt-1 font-serif text-lg text-primary">Resultados das três lentes</CardTitle></CardHeader><CardContent className="space-y-3">{worksheets.map(item => <div className="rounded-lg bg-muted/60 p-3" key={item.lens}><div className="flex items-center justify-between gap-2"><p className="text-sm font-semibold text-primary">{item.lens}</p><Badge variant="secondary">{item.status === "versao_final" ? "Versão final" : item.status === "rascunho" ? "Rascunho" : "Pendente"}</Badge></div><p className="mt-1 text-xs leading-5 text-muted-foreground">{item.classification}</p></div>)}</CardContent></Card></section><Card className="border-0 bg-card/85 shadow-sm"><CardHeader><p className="eyebrow">Eventos centrais e relações</p><CardTitle className="mt-1 font-serif text-xl text-primary">Base da integração</CardTitle><CardDescription>Reutilize apenas as evidências pertinentes à missão. Diferencie relações demonstradas, possíveis e não demonstradas.</CardDescription></CardHeader><CardContent className="space-y-5"><EventPicker selected={draft.selectedEventIds} onChange={(selectedEventIds) => update("selectedEventIds", selectedEventIds)} /><div><Label htmlFor="connection-notes">Relações entre eventos e grau de evidência</Label><Textarea id="connection-notes" value={draft.connectionNotes} onChange={(event) => update("connectionNotes", event.target.value)} className="mt-2 min-h-28" placeholder="Indique os vínculos demonstrados, possíveis/hipotéticos e não demonstrados que importam para a Missão de Aprofundamento." /></div></CardContent></Card><Card className="border-0 bg-card/85 shadow-sm"><CardHeader><p className="eyebrow">Síntese Estratégica Integrada</p><CardTitle className="mt-1 font-serif text-xl text-primary">Seis blocos de redação</CardTitle><CardDescription>O texto final deve preservar as diferenças de grau de certeza e não repetir integralmente as três fichas anteriores.</CardDescription></CardHeader><CardContent className="space-y-6"><SectionField number="1" title="Juízo estratégico integrado" value={draft.strategicJudgment} onChange={(value) => update("strategicJudgment", value)} hint="Apresente a situação geral e sua relevância para os interesses e a liberdade de ação do Brasil." /><SectionField number="2" title="Resultado das três lentes" value={draft.lensResults} onChange={(value) => update("lensResults", value)} hint="Registre sinteticamente as classificações e os eventos principais, sem forçar convergência." /><SectionField number="3" title="Conexões, limites e pontos a esclarecer" value={draft.connectionsAndLimits} onChange={(value) => update("connectionsAndLimits", value)} hint="Explique o que está demonstrado, o que permanece possível e as incertezas relevantes." /><SectionField number="4" title="Resposta à Missão de Aprofundamento" value={draft.missionResponse} onChange={(value) => update("missionResponse", value)} hint="Responda diretamente à missão do GT e indique as evidências que sustentam a resposta." /><SectionField number="5" title="Recomendações estratégicas" value={draft.recommendations} onChange={(value) => update("recommendations", value)} hint="Organize medidas de resiliência, de esclarecimento e condicionadas a novas evidências, preservando salvaguardas jurídicas quando aplicável." /><SectionField number="6" title="Estado final desejado" value={draft.desiredEndState} onChange={(value) => update("desiredEndState", value)} hint="Conclua com a condição estratégica que o Brasil deve buscar." /><div className="flex justify-start border-t border-border/70 pt-5"><Button variant="outline" onClick={generateSynthesisPdf}><Download className="mr-2 h-4 w-4" />GERAR PDF da Síntese</Button></div></CardContent></Card><Card className="border-0 bg-card/85 shadow-sm"><CardHeader className="flex flex-col gap-4 border-b border-border/70 pb-5 sm:flex-row sm:items-start sm:justify-between"><div><p className="eyebrow">Apresentação final</p><CardTitle className="mt-1 font-serif text-xl text-primary">Quatro slides</CardTitle><CardDescription className="mt-2">Estruture o conteúdo que será utilizado na apresentação oral do Grupo de Trabalho.</CardDescription></div><Button variant="outline" className="border-primary/30 text-primary hover:bg-secondary" onClick={generatePresentationPdf}><Presentation className="mr-2 h-4 w-4" />GERAR PDF da Apresentação</Button></CardHeader><CardContent className="grid gap-5 pt-6 xl:grid-cols-2"><SlideField number="1" title="Juízo Estratégico Integrado" value={draft.slideOne} onChange={(value) => update("slideOne", value)} hint="Problema central do caso e as três classificações." /><SlideField number="2" title="Evidências e Incertezas" value={draft.slideTwo} onChange={(value) => update("slideTwo", value)} hint="Eventos decisivos, vulnerabilidades e até três pontos a esclarecer." /><SlideField number="3" title="Missão de Aprofundamento" value={draft.slideThree} onChange={(value) => update("slideThree", value)} hint="Pergunta, resposta-síntese e eventos que a sustentam." /><SlideField number="4" title="Recomendações e Estado Final" value={draft.slideFour} onChange={(value) => update("slideFour", value)} hint="Resiliência, esclarecimento, medidas condicionadas e estado final." /></CardContent></Card><div className="sticky bottom-4 z-10 flex flex-col gap-3 rounded-xl border border-border bg-card/95 p-4 shadow-lg backdrop-blur sm:flex-row sm:items-center sm:justify-between"><p className="text-sm text-muted-foreground">{ready ? <span className="inline-flex items-center gap-2 text-emerald-700"><CheckCircle2 className="h-4 w-4" />Campos essenciais preenchidos</span> : "Preencha os seis blocos e os quatro slides para liberar a versão final."}</p><div className="flex flex-wrap gap-2"><Button variant="outline" disabled={save.isPending} onClick={() => submit("rascunho")}><Save className="mr-2 h-4 w-4" />Salvar rascunho</Button>{canFinalize && <Button disabled={save.isPending} onClick={() => submit("versao_final")}><FileCheck2 className="mr-2 h-4 w-4" />Finalizar síntese</Button>}</div></div></div>;
+}

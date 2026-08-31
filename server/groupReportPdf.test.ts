@@ -10,15 +10,17 @@ describe("Relatório do GT em PDF", () => {
     expect(renderer).toContain("COMPONENTES DO GT:");
     expect(renderer).toContain('["Elemento", "Aplicação aos eventos", "Resultado", "Teste de suficiência"]');
     expect(renderer).toContain("worksheet?.decisiveEventIds");
-    expect(renderer).toContain("selectedLenses: WorksheetLens[]");
+    expect(renderer).toContain("downloadGroupReportPdf(workspace: any, selectedLenses: WorksheetLens[])");
     expect(renderer).toContain("selectedLenses.forEach(lensId => addWorksheet");
+    expect(renderer).not.toContain("addSynthesis(doc, workspace);");
+    expect(renderer).not.toContain("addAppendices(doc, workspace, appendices);");
     expect(renderer).toContain("doc.save(`${groupSlug}_RelatorioConsolidado.pdf`)");
   });
 
   it("aciona a geração local de PDF a partir do botão do relatório", () => {
     const page = readFileSync(resolve(process.cwd(), "client/src/pages/ConsolidatedReport.tsx"), "utf8");
 
-    expect(page).toContain("downloadGroupReportPdf(workspace, appendices, selectedWorksheetLenses)");
+    expect(page).toContain("downloadGroupReportPdf(workspace, selectedWorksheetLenses)");
     expect(page).toContain("Ficha-Síntese ${reportLensOrder.indexOf(lens) + 1} — ${lenses[lens].label}");
     expect(page).toContain("reportLensOrder.map(lens => <label");
     expect(page).toContain("Selecione ao menos uma Ficha-Síntese para gerar o relatório em PDF.");

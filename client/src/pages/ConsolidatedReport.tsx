@@ -100,7 +100,7 @@ export default function ConsolidatedReport() {
       return;
     }
     try {
-      downloadGroupReportPdf(workspace, appendices, selectedWorksheetLenses);
+      downloadGroupReportPdf(workspace, selectedWorksheetLenses);
       toast.success("Relatório do GT gerado e iniciado para download.");
     } catch {
       toast.error("Não foi possível gerar o relatório em PDF. Tente novamente.");

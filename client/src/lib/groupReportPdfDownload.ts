@@ -283,7 +283,7 @@ function addAppendices(doc: jsPDF, workspace: any, appendices: ReportAppendix[])
   });
 }
 
-export function downloadGroupReportPdf(workspace: any, appendices: ReportAppendix[], selectedLenses: WorksheetLens[]) {
+export function downloadGroupReportPdf(workspace: any, selectedLenses: WorksheetLens[]) {
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const pageWidth = doc.internal.pageSize.getWidth();
   const contentWidth = pageWidth - MARGIN * 2;
@@ -342,12 +342,10 @@ export function downloadGroupReportPdf(workspace: any, appendices: ReportAppendi
   doc.setFont("helvetica", "italic");
   doc.setFontSize(8.5);
   doc.setTextColor(105, 122, 142);
-  const note = "O relatório reúne as Fichas-Síntese selecionadas, a Síntese Estratégica Integrada, os quatro slides e os anexos que tenham sido expressamente selecionados pelo GT.";
+  const note = "Este documento reúne exclusivamente as Fichas-Síntese que tenham sido selecionadas pelo usuário.";
   const noteLines = doc.splitTextToSize(note, contentWidth) as string[];
   doc.text(noteLines, MARGIN, cursorY + 12, { lineHeightFactor: 1.35 });
   selectedLenses.forEach(lensId => addWorksheet(doc, workspace, workspace.worksheets.find((item: any) => item.lens === lensId), lensId));
-  addSynthesis(doc, workspace);
-  addAppendices(doc, workspace, appendices);
   addFooter(doc);
   const groupSlug = workspace.group.code.replace(/\s+/g, "");
   doc.save(`${groupSlug}_RelatorioConsolidado.pdf`);

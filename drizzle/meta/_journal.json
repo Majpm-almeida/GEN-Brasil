@@ -29,6 +29,13 @@
       "when": 1788130325415,
       "tag": "0003_breezy_gladiator",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1788195858222,
+      "tag": "0004_lethal_firestar",
+      "breakpoints": true
     }
   ]
 }

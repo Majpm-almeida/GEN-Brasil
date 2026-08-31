@@ -190,7 +190,10 @@ export type WorksheetSaveInput = {
   lens: WorksheetLens;
   classification?: Classification | null;
   selectedEventIds?: string | null;
+  decisiveEventIds?: string | null;
   testEntries?: string | null;
+  testResults?: string | null;
+  testSufficiency?: string | null;
   includeAsAppendix?: boolean;
   centralJudgment?: string | null;
   evidenceBasis?: string | null;

@@ -1,8 +1,8 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import * as db from "../db";
-import { classificationOptions, worksheetLenses } from "../../shared/exercise";
-import { canRegisterSubmission, isSynthesisComplete, isWorksheetComplete } from "../../shared/validation";
+import { analyticResultOptions, classificationOptions, worksheetLenses } from "../../shared/exercise";
+import { canRegisterSubmission, hasCompleteCriterionResults, isSynthesisComplete, isWorksheetComplete } from "../../shared/validation";
 import { approvedProcedure, router } from "../_core/trpc";
 
 const groupRoleSchema = z.enum(["dirigente", "relator", "integrante"]);
@@ -35,7 +35,10 @@ export const workspaceRouter = router({
     lens: z.enum(worksheetLenses),
     classification: z.enum(classificationOptions).nullable().optional(),
     selectedEventIds: z.string().nullable().optional(),
+    decisiveEventIds: z.string().nullable().optional(),
     testEntries: z.string().nullable().optional(),
+    testResults: z.string().nullable().optional(),
+    testSufficiency: z.string().nullable().optional(),
     includeAsAppendix: z.boolean().optional(),
     centralJudgment: z.string().nullable().optional(),
     evidenceBasis: z.string().nullable().optional(),
@@ -48,8 +51,8 @@ export const workspaceRouter = router({
     if (input.status === "versao_final" && !access.canFinalize) {
       throw new TRPCError({ code: "FORBIDDEN", message: "Somente o dirigente ou relator pode finalizar a ficha." });
     }
-    if (input.status === "versao_final" && !isWorksheetComplete(input)) {
-      throw new TRPCError({ code: "BAD_REQUEST", message: "Preencha a classificação e os cinco parágrafos para finalizar a ficha." });
+    if (input.status === "versao_final" && (!isWorksheetComplete(input) || !hasCompleteCriterionResults(input.lens, input.testResults))) {
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Para finalizar, preencha a classificação, os cinco parágrafos e o resultado de todos os critérios analíticos." });
     }
     await db.saveWorksheet(input.groupId, ctx.user.id, input);
     const deliverableByLens = {

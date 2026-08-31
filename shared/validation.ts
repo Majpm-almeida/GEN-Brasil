@@ -1,3 +1,5 @@
+import { analyticResultOptions, lenses, type WorksheetLens } from "./exercise";
+
 export type WorksheetRequiredFields = {
   classification?: string | null;
   centralJudgment?: string | null;
@@ -20,6 +22,15 @@ export type SynthesisRequiredFields = {
   slideFour?: string | null;
 };
 
+function parseResultEntries(value?: string | null) {
+  try {
+    const parsed = JSON.parse(value ?? "{}");
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed as Record<string, unknown> : {};
+  } catch {
+    return {};
+  }
+}
+
 function hasText(value?: string | null) {
   return Boolean(value?.trim());
 }
@@ -33,6 +44,11 @@ export function isWorksheetComplete(input: WorksheetRequiredFields) {
     hasText(input.clarificationNeeded) &&
     hasText(input.integrationInput),
   );
+}
+
+export function hasCompleteCriterionResults(lens: WorksheetLens, testResults?: string | null) {
+  const entries = parseResultEntries(testResults);
+  return lenses[lens].criteria.every(criterion => analyticResultOptions.includes(entries[criterion.id] as typeof analyticResultOptions[number]));
 }
 
 export function isSynthesisComplete(input: SynthesisRequiredFields) {

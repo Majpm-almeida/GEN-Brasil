@@ -8,6 +8,15 @@ export const classificationOptions = [
 
 export type Classification = (typeof classificationOptions)[number];
 
+export const analyticResultOptions = [
+  "Satisfeito",
+  "Parcial",
+  "Não satisfeito",
+  "Insuficiente",
+] as const;
+
+export type AnalyticResult = (typeof analyticResultOptions)[number];
+
 export const worksheetLenses = [
   "guerra_hibrida",
   "lawfare",

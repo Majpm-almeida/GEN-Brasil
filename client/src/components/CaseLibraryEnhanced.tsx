@@ -12,7 +12,7 @@ import { searchCaseEvents } from "@shared/caseSearch";
 import { BookOpenCheck, ChevronRight, CircleAlert, FileText, Info, Printer, Scale, Search, X } from "lucide-react";
 import { useState } from "react";
 
-const wideConsultationDialog = "max-h-[calc(100vh-2rem)] w-[calc(100vw-2rem)] max-w-none grid-rows-[auto_minmax(0,1fr)] gap-0 overflow-hidden p-0 sm:w-[calc(100vw-3rem)] lg:w-[min(94vw,86rem)] 2xl:w-[min(90vw,96rem)]";
+const wideConsultationDialog = "max-h-[calc(100vh-2rem)] w-[calc(100vw-2rem)] max-w-none grid-rows-[auto_minmax(0,1fr)] gap-0 overflow-hidden p-0 sm:max-w-none sm:w-[calc(100vw-3rem)] lg:w-[min(94vw,86rem)] 2xl:w-[min(90vw,96rem)]";
 
 function DetailTable({ headers, rows }: { headers: readonly string[]; rows: readonly (readonly string[])[] }) {
   return <div className="overflow-hidden rounded-xl border border-border/80"><div className="grid grid-cols-[minmax(150px,0.45fr)_minmax(0,1fr)] border-b border-border/80 bg-muted/65 text-xs font-bold uppercase tracking-wider text-primary"><div className="p-3">{headers[0] ?? ""}</div><div className="border-l border-border/80 p-3">{headers[1] ?? ""}</div></div>{rows.map(([first = "", second = ""]) => <div key={first} className="grid grid-cols-[minmax(150px,0.45fr)_minmax(0,1fr)] border-b border-border/70 last:border-b-0"><div className="p-3 text-sm font-semibold leading-6 text-primary">{first}</div><div className="border-l border-border/70 p-3 text-sm leading-6 text-muted-foreground">{second}</div></div>)}</div>;

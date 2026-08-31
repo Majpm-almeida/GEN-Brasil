@@ -97,4 +97,6 @@
 - [x] Ajustar a largura das janelas DESCRIÇÃO COMPLETA e REGRAS para aproveitar dinamicamente a área útil em navegadores desktop.
 - [x] Preservar rolagem, legibilidade e comportamento responsivo das janelas em telas menores.
 - [ ] Testar, publicar e validar manualmente as janelas redimensionadas.
+- [x] Sobrescrever localmente o limite responsivo padrão do diálogo nas janelas DESCRIÇÃO COMPLETA e REGRAS para eliminar a largura fixa em desktop.
+- [ ] Publicar e confirmar no ambiente público a aplicação efetiva da nova largura das janelas.
 - [x] Criar commit e enviar ao GitHub as atualizações recentes da Base do caso, colaboração, relatório consolidado e correções de navegação.

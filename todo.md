@@ -117,3 +117,6 @@
 - [x] Adicionar a seleção condicionada de eventos decisivos entre as evidências mobilizadas de cada Ficha-Síntese.
 - [x] Separar por critério os registros de Aplicação aos eventos, Resultado e Teste de suficiência.
 - [x] Incluir no PDF do Relatório do GT a identificação institucional, os metadados de participantes e os quadros de teste por lente conforme o modelo aprovado.
+- [x] Adicionar caixas de seleção para escolher as Fichas-Síntese que devem compor o Relatório do GT em PDF.
+- [x] Filtrar a composição do PDF para incluir exclusivamente as fichas selecionadas pelo usuário.
+- [ ] Criar testes, publicar e validar manualmente a seleção de fichas do relatório.

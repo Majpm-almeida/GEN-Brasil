@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
+import { downloadWorksheetPdf } from "@/lib/worksheetPdfDownload";
 import { caseEvents, lenses, type WorksheetLens } from "@shared/exercise";
 import { BookOpenText, FileDown, History, Loader2, MessageSquareText, Send, UsersRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -89,7 +90,15 @@ function WorksheetExportPanel({ groupId }: { groupId: number | null }) {
   const { data: workspace, isLoading } = trpc.workspace.groupWorkspace.useQuery({ groupId: groupId ?? 0 }, { enabled: Boolean(groupId) });
   if (!groupId) return <EmptyCollaboration />;
   if (isLoading || !workspace) return <div className="flex min-h-44 items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
-  return <Card className="border-0 bg-card/85 shadow-sm"><CardHeader><p className="eyebrow">Produto acadêmico</p><CardTitle className="mt-1 font-serif text-xl text-primary">Exportar Fichas-Síntese em PDF</CardTitle><CardDescription>Gere uma versão de impressão com identificação do GT, lente, classificação, eventos mobilizados, teste analítico e texto final.</CardDescription></CardHeader><CardContent className="space-y-3">{worksheetLensOptions.map(lens => { const worksheet = workspace.worksheets.find((item: any) => item.lens === lens); return <div key={lens} className="flex flex-col gap-3 rounded-xl border border-border/75 bg-background/55 p-4 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-semibold text-primary">{lenses[lens].label}</p><p className="mt-1 text-sm text-muted-foreground">{worksheet ? (worksheet.status === "versao_final" ? "Versão final disponível para exportação." : "Rascunho disponível para revisão ou impressão.") : "A ficha ainda não possui conteúdo salvo."}</p></div><Button variant="outline" size="sm" disabled={!worksheet} onClick={() => printWorksheet({ worksheet, group: workspace.group })}><FileDown className="mr-2 h-4 w-4" />Exportar em PDF</Button></div>;})}</CardContent></Card>;
+  const exportWorksheet = async (worksheet: any, lens: WorksheetLens) => {
+    try {
+      await downloadWorksheetPdf({ workspace, worksheet, lensId: lens });
+      toast.success("Ficha-Síntese gerada e iniciada para download.");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Não foi possível gerar a Ficha-Síntese em PDF.");
+    }
+  };
+  return <Card className="border-0 bg-card/85 shadow-sm"><CardHeader><p className="eyebrow">Produto acadêmico</p><CardTitle className="mt-1 font-serif text-xl text-primary">Exportar Fichas-Síntese em PDF</CardTitle><CardDescription>Gere uma Ficha-Síntese com capa institucional ESG/CSD 2026 e corpo acadêmico de uma página.</CardDescription></CardHeader><CardContent className="space-y-3">{worksheetLensOptions.map(lens => { const worksheet = workspace.worksheets.find((item: any) => item.lens === lens); return <div key={lens} className="flex flex-col gap-3 rounded-xl border border-border/75 bg-background/55 p-4 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-semibold text-primary">{lenses[lens].label}</p><p className="mt-1 text-sm text-muted-foreground">{worksheet ? (worksheet.status === "versao_final" ? "Versão final disponível para exportação." : "Rascunho disponível para revisão ou exportação.") : "A ficha ainda não possui conteúdo salvo."}</p></div><Button variant="outline" size="sm" disabled={!worksheet} onClick={() => void exportWorksheet(worksheet, lens)}><FileDown className="mr-2 h-4 w-4" />Exportar em PDF</Button></div>;})}</CardContent></Card>;
 }
 
 function EmptyCollaboration() {

@@ -12,5 +12,8 @@ describe("editor aprimorado de Fichas-Síntese", () => {
     expect(editor).toContain("Teste de suficiência");
     expect(editor).toContain("analyticResultOptions.map");
     expect(editor).toContain("decisiveEventIds: current.decisiveEventIds.filter(id => selectedEventIds.includes(id))");
+    expect(editor).toContain("getWorksheetPdfFit(draft)");
+    expect(editor).toContain("Extensão excedida:");
+    expect(editor).toContain("ultrapassarão uma página no PDF");
   });
 });

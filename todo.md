@@ -133,6 +133,6 @@
 - [x] Permitir baixar todas as Fichas-Síntese selecionadas como arquivos PDF individuais em uma única ação.
 - [x] Adicionar pré-visualização paginada da capa e do corpo da Ficha-Síntese antes do download.
 - [x] Exibir a distribuição de palavras entre os cinco parágrafos para orientar o equilíbrio do texto acadêmico.
-- [ ] Criar testes, publicar e validar manualmente os aprimoramentos de exportação e revisão das Fichas-Síntese.
+- [x] Criar testes, publicar e validar manualmente os aprimoramentos de exportação e revisão das Fichas-Síntese.
 - [x] Vincular o download em lote a uma seleção explícita de Fichas-Síntese e baixar somente as escolhidas pelo usuário.
 - [x] Exibir uma visão comparativa dos cinco parágrafos com total, média e indicação de desequilíbrio textual.

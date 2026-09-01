@@ -6,8 +6,10 @@ describe("acionador flutuante de salvamento", () => {
   it("reúne salvamento, finalização e interações por mouse e teclado", () => {
     const component = readFileSync(resolve(process.cwd(), "client/src/components/FloatingSaveMenu.tsx"), "utf8");
 
-    expect(component).toContain("onMouseEnter={() => setOpen(true)}");
-    expect(component).toContain("onFocusCapture={() => setOpen(true)}");
+    expect(component).toContain("const scheduleClose = (delay = 360)");
+    expect(component).toContain("onMouseLeave={() => scheduleClose()}");
+    expect(component).toContain("cancelScheduledClose(); setOpen(true);");
+    expect(component).toContain("onFocusCapture={() => { cancelScheduledClose(); setOpen(true); }}");
     expect(component).toContain('event.key === "Escape"');
     expect(component).toContain("Salvar rascunho");
     expect(component).toContain("aria-label=\"Abrir ações de salvamento\"");

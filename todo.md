@@ -129,4 +129,4 @@
 - [x] Incorporar o brasão nacional e a capa institucional da ESG/CSD 2026 ao PDF das Fichas-Síntese.
 - [x] Reformatar o corpo da Ficha-Síntese para conter eventos utilizados como evidência e cinco parágrafos em uma única página.
 - [x] Exibir aviso visual em vermelho quando os cinco parágrafos excederem a capacidade de uma página no PDF.
-- [ ] Criar testes, publicar e validar manualmente o novo formato das Fichas-Síntese em PDF.
+- [x] Criar testes, publicar e validar manualmente o novo formato das Fichas-Síntese em PDF.

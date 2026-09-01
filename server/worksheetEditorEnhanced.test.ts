@@ -15,5 +15,7 @@ describe("editor aprimorado de Fichas-Síntese", () => {
     expect(editor).toContain("getWorksheetPdfFit(draft)");
     expect(editor).toContain("Extensão excedida:");
     expect(editor).toContain("ultrapassarão uma página no PDF");
+    expect(editor).toContain("Faixa: 70–130");
+    expect(editor).toContain("Faixa equilibrada");
   });
 });

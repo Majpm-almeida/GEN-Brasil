@@ -1,15 +1,17 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { WorksheetPdfPreview } from "@/components/WorksheetPdfPreview";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { downloadWorksheetPdf } from "@/lib/worksheetPdfDownload";
+import { downloadIndividualWorksheetsPdf, downloadWorksheetPdf } from "@/lib/worksheetPdfDownload";
 import { caseEvents, lenses, type WorksheetLens } from "@shared/exercise";
-import { BookOpenText, FileDown, History, Loader2, MessageSquareText, Send, UsersRound } from "lucide-react";
+import { BookOpenText, Eye, FileDown, History, Loader2, MessageSquareText, Send, UsersRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -88,6 +90,9 @@ function VersionHistoryPanel({ groupId }: { groupId: number | null }) {
 
 function WorksheetExportPanel({ groupId }: { groupId: number | null }) {
   const { data: workspace, isLoading } = trpc.workspace.groupWorkspace.useQuery({ groupId: groupId ?? 0 }, { enabled: Boolean(groupId) });
+  const [preview, setPreview] = useState<{ worksheet: any; lens: WorksheetLens } | null>(null);
+  const [downloadingAll, setDownloadingAll] = useState(false);
+  const [selectedIndividualLenses, setSelectedIndividualLenses] = useState<WorksheetLens[]>(worksheetLensOptions);
   if (!groupId) return <EmptyCollaboration />;
   if (isLoading || !workspace) return <div className="flex min-h-44 items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
   const exportWorksheet = async (worksheet: any, lens: WorksheetLens) => {
@@ -98,7 +103,21 @@ function WorksheetExportPanel({ groupId }: { groupId: number | null }) {
       toast.error(error instanceof Error ? error.message : "Não foi possível gerar a Ficha-Síntese em PDF.");
     }
   };
-  return <Card className="border-0 bg-card/85 shadow-sm"><CardHeader><p className="eyebrow">Produto acadêmico</p><CardTitle className="mt-1 font-serif text-xl text-primary">Exportar Fichas-Síntese em PDF</CardTitle><CardDescription>Gere uma Ficha-Síntese com capa institucional ESG/CSD 2026 e corpo acadêmico de uma página.</CardDescription></CardHeader><CardContent className="space-y-3">{worksheetLensOptions.map(lens => { const worksheet = workspace.worksheets.find((item: any) => item.lens === lens); return <div key={lens} className="flex flex-col gap-3 rounded-xl border border-border/75 bg-background/55 p-4 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-semibold text-primary">{lenses[lens].label}</p><p className="mt-1 text-sm text-muted-foreground">{worksheet ? (worksheet.status === "versao_final" ? "Versão final disponível para exportação." : "Rascunho disponível para revisão ou exportação.") : "A ficha ainda não possui conteúdo salvo."}</p></div><Button variant="outline" size="sm" disabled={!worksheet} onClick={() => void exportWorksheet(worksheet, lens)}><FileDown className="mr-2 h-4 w-4" />Exportar em PDF</Button></div>;})}</CardContent></Card>;
+  const exportAll = async () => {
+    setDownloadingAll(true);
+    try {
+      const count = await downloadIndividualWorksheetsPdf(workspace, selectedIndividualLenses);
+      toast.success(`${count} Ficha${count === 1 ? "-Síntese foi iniciada" : "s-Síntese foram iniciadas"} para download individual.`);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Não foi possível iniciar os downloads individuais.");
+    } finally {
+      setDownloadingAll(false);
+    }
+  };
+  const availableCount = workspace.worksheets.filter((worksheet: any) => worksheetLensOptions.includes(worksheet.lens)).length;
+  const selectedAvailableCount = selectedIndividualLenses.filter(lens => workspace.worksheets.some((worksheet: any) => worksheet.lens === lens)).length;
+  const toggleIndividualLens = (lens: WorksheetLens) => setSelectedIndividualLenses(current => current.includes(lens) ? current.filter(item => item !== lens) : [...current, lens]);
+  return <><Card className="border-0 bg-card/85 shadow-sm"><CardHeader><div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div><p className="eyebrow">Produto acadêmico</p><CardTitle className="mt-1 font-serif text-xl text-primary">Exportar Fichas-Síntese em PDF</CardTitle><CardDescription className="mt-2">Selecione as fichas para baixar arquivos individuais ou revise capa e corpo antes de exportar uma ficha específica.</CardDescription></div><Button size="sm" disabled={!selectedAvailableCount || downloadingAll} onClick={() => void exportAll()}><FileDown className="mr-2 h-4 w-4" />{downloadingAll ? "Preparando..." : `Baixar ${selectedAvailableCount || ""} ficha${selectedAvailableCount === 1 ? "" : "s"} individual${selectedAvailableCount === 1 ? "" : "mente"}`}</Button></div></CardHeader><CardContent className="space-y-3"><div className="rounded-xl border border-primary/15 bg-secondary/30 p-4"><p className="text-sm font-semibold text-primary">Fichas para download individual</p><p className="mt-1 text-xs leading-5 text-muted-foreground">Marque as fichas que devem ser baixadas como arquivos PDF separados. As três opções iniciam selecionadas.</p><div className="mt-3 grid gap-2 sm:grid-cols-3">{worksheetLensOptions.map(lens => { const available = workspace.worksheets.some((worksheet: any) => worksheet.lens === lens); return <label key={lens} className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm ${available ? "cursor-pointer bg-card" : "cursor-not-allowed bg-muted/40 opacity-60"}`}><Checkbox checked={selectedIndividualLenses.includes(lens)} disabled={!available} onCheckedChange={() => toggleIndividualLens(lens)} /><span>{lenses[lens].label}</span></label>; })}</div></div>{worksheetLensOptions.map(lens => { const worksheet = workspace.worksheets.find((item: any) => item.lens === lens); return <div key={lens} className="flex flex-col gap-3 rounded-xl border border-border/75 bg-background/55 p-4 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-semibold text-primary">{lenses[lens].label}</p><p className="mt-1 text-sm text-muted-foreground">{worksheet ? (worksheet.status === "versao_final" ? "Versão final disponível para exportação." : "Rascunho disponível para revisão ou exportação.") : "A ficha ainda não possui conteúdo salvo."}</p></div><div className="flex flex-wrap gap-2"><Button variant="outline" size="sm" disabled={!worksheet} onClick={() => setPreview({ worksheet, lens })}><Eye className="mr-2 h-4 w-4" />Pré-visualizar</Button><Button variant="outline" size="sm" disabled={!worksheet} onClick={() => void exportWorksheet(worksheet, lens)}><FileDown className="mr-2 h-4 w-4" />Exportar em PDF</Button></div></div>;})}</CardContent></Card>{preview && <WorksheetPdfPreview open={Boolean(preview)} onOpenChange={(open) => { if (!open) setPreview(null); }} workspace={workspace} worksheet={preview.worksheet} lensId={preview.lens} onDownload={() => { void exportWorksheet(preview.worksheet, preview.lens); setPreview(null); }} />}</>;
 }
 
 function EmptyCollaboration() {

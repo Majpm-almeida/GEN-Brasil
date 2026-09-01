@@ -231,6 +231,24 @@ export async function downloadWorksheetPdf({ workspace, worksheet, lensId }: { w
   doc.save(`${slug}_${worksheetName(lensId).replace(/[^a-zA-Z0-9]+/g, "_")}.pdf`);
 }
 
+export async function downloadIndividualWorksheetsPdf(workspace: any, selectedLenses: WorksheetLens[]) {
+  const availableLenses = selectedLenses.filter(lensId => workspace.worksheets.some((worksheet: any) => worksheet.lens === lensId));
+  if (!availableLenses.length) throw new Error("Não há Fichas-Síntese salvas para download individual.");
+  const overflow = availableLenses.find(lensId => !getWorksheetPdfFit(workspace.worksheets.find((worksheet: any) => worksheet.lens === lensId)).fits);
+  if (overflow) throw new Error(`A ${worksheetName(overflow)} ultrapassa a capacidade de uma página no PDF.`);
+  const brasao = await loadBrasao();
+  const slug = String(workspace.group.code || "GT").replace(/\s+/g, "");
+  availableLenses.forEach(lensId => {
+    const worksheet = workspace.worksheets.find((item: any) => item.lens === lensId);
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    doc.setProperties({ title: worksheetName(lensId), subject: CASE_TITLE, author: "GEN-Brasil" });
+    drawCover(doc, workspace, worksheet, lensId, brasao);
+    drawBody(doc, worksheet);
+    doc.save(`${slug}_${worksheetName(lensId).replace(/[^a-zA-Z0-9]+/g, "_")}.pdf`);
+  });
+  return availableLenses.length;
+}
+
 export async function downloadSelectedWorksheetsPdf(workspace: any, selectedLenses: WorksheetLens[]) {
   const selectedWorksheets = selectedLenses.map(lensId => ({ lensId, worksheet: workspace.worksheets.find((item: any) => item.lens === lensId) }));
   const overflow = selectedWorksheets.find(item => !getWorksheetPdfFit(item.worksheet).fits);

@@ -83,6 +83,7 @@ export async function getMembershipsForUser(userId: number) {
     presentationSlot: workGroups.presentationSlot,
     role: groupMembers.role,
     course: groupMembers.course,
+    reportName: groupMembers.reportName,
   }).from(groupMembers).innerJoin(workGroups, eq(groupMembers.groupId, workGroups.id))
     .where(and(eq(groupMembers.userId, userId), eq(groupMembers.active, true), eq(workGroups.active, true)));
 }
@@ -117,7 +118,7 @@ export async function getGroupWorkspace(groupId: number) {
   const [group] = await db.select().from(workGroups).where(eq(workGroups.id, groupId)).limit(1);
   if (!group) return undefined;
   const [members, worksheets, synthesis, groupDeliverables] = await Promise.all([
-    db.select({ id: groupMembers.id, userId: users.id, name: users.name, email: users.email, role: groupMembers.role, course: groupMembers.course, active: groupMembers.active })
+    db.select({ id: groupMembers.id, userId: users.id, name: users.name, email: users.email, role: groupMembers.role, course: groupMembers.course, reportName: groupMembers.reportName, active: groupMembers.active })
       .from(groupMembers).innerJoin(users, eq(groupMembers.userId, users.id)).where(eq(groupMembers.groupId, groupId)),
     db.select().from(analyticalWorksheets).where(eq(analyticalWorksheets.groupId, groupId)),
     db.select().from(integratedSyntheses).where(eq(integratedSyntheses.groupId, groupId)).limit(1),
@@ -169,16 +170,21 @@ export async function listParticipants() {
   const db = await databaseOrThrow();
   const [participants, memberships] = await Promise.all([
     db.select({ id: users.id, name: users.name, email: users.email, role: users.role, lastSignedIn: users.lastSignedIn }).from(users).orderBy(desc(users.lastSignedIn)),
-    db.select({ userId: groupMembers.userId, groupId: groupMembers.groupId, groupCode: workGroups.code, role: groupMembers.role, course: groupMembers.course })
+    db.select({ userId: groupMembers.userId, groupId: groupMembers.groupId, groupCode: workGroups.code, role: groupMembers.role, course: groupMembers.course, reportName: groupMembers.reportName })
       .from(groupMembers).innerJoin(workGroups, eq(groupMembers.groupId, workGroups.id)).where(eq(groupMembers.active, true)),
   ]);
   return participants.map(participant => ({ ...participant, memberships: memberships.filter(membership => membership.userId === participant.id) }));
 }
 
-export async function assignParticipant(input: { groupId: number; userId: number; role: GroupRole; course?: string | null }) {
+export async function assignParticipant(input: { groupId: number; userId: number; role: GroupRole; course?: string | null; reportName?: string | null }) {
   const db = await databaseOrThrow();
-  await db.insert(groupMembers).values({ ...input, course: input.course ?? null, active: true })
-    .onDuplicateKeyUpdate({ set: { role: input.role, course: input.course ?? null, active: true } });
+  await db.insert(groupMembers).values({ ...input, course: input.course ?? null, reportName: input.reportName ?? null, active: true })
+    .onDuplicateKeyUpdate({ set: { role: input.role, course: input.course ?? null, reportName: input.reportName ?? null, active: true } });
+}
+
+export async function setMemberReportName(input: { groupId: number; userId: number; reportName: string | null }) {
+  const db = await databaseOrThrow();
+  await db.update(groupMembers).set({ reportName: input.reportName }).where(and(eq(groupMembers.groupId, input.groupId), eq(groupMembers.userId, input.userId), eq(groupMembers.active, true)));
 }
 
 export async function removeParticipantFromGroup(input: { groupId: number; userId: number }) {

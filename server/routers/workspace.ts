@@ -11,11 +11,11 @@ const deliverableStatusSchema = z.enum(["pendente", "rascunho", "versao_final", 
 const deliverableTypeSchema = z.enum(["ficha_guerra_hibrida", "ficha_lawfare", "ficha_seguranca_transnacional", "sintese_integrada", "slides_finais"]);
 
 async function assertGroupAccess(user: { id: number; role: "user" | "admin" }, groupId: number) {
-  if (user.role === "admin") return { canFinalize: true, groupRole: "admin" as const };
+  if (user.role === "admin") return { canFinalize: true, canManageReportNames: true, groupRole: "admin" as const };
   const memberships = await db.getMembershipsForUser(user.id);
   const membership = memberships.find(item => item.groupId === groupId);
   if (!membership) throw new TRPCError({ code: "FORBIDDEN", message: "Você não possui acesso a este Grupo de Trabalho." });
-  return { canFinalize: membership.role === "dirigente" || membership.role === "relator", groupRole: membership.role };
+  return { canFinalize: membership.role === "dirigente" || membership.role === "relator", canManageReportNames: membership.role === "dirigente", groupRole: membership.role };
 }
 
 export const workspaceRouter = router({
@@ -146,6 +146,18 @@ export const workspaceRouter = router({
     }
     return { success: true };
   }),
+  setMemberReportName: approvedProcedure.input(z.object({
+    groupId: z.number().int().positive(),
+    userId: z.number().int().positive(),
+    reportName: z.string().trim().max(160).nullable(),
+  })).mutation(async ({ ctx, input }) => {
+    const access = await assertGroupAccess(ctx.user, input.groupId);
+    if (!access.canManageReportNames) {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Somente o dirigente do GT ou a administração pode alterar o nome do relatório." });
+    }
+    await db.setMemberReportName({ ...input, reportName: input.reportName || null });
+    return { success: true };
+  }),
   eventComments: router({
     list: approvedProcedure.input(z.object({ groupId: z.number().int().positive(), eventId: z.number().int().min(1).max(8) })).query(async ({ ctx, input }) => {
       await assertGroupAccess(ctx.user, input.groupId);
@@ -190,7 +202,7 @@ export const workspaceRouter = router({
       if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
       return { id: await db.createWorkGroup(input) };
     }),
-    assignParticipant: approvedProcedure.input(z.object({ groupId: z.number().int().positive(), userId: z.number().int().positive(), role: groupRoleSchema, course: z.string().max(160).nullable().optional() })).mutation(async ({ ctx, input }) => {
+    assignParticipant: approvedProcedure.input(z.object({ groupId: z.number().int().positive(), userId: z.number().int().positive(), role: groupRoleSchema, course: z.string().max(160).nullable().optional(), reportName: z.string().trim().max(160).nullable().optional() })).mutation(async ({ ctx, input }) => {
       if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
       await db.assignParticipant(input);
       return { success: true };

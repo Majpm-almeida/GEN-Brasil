@@ -36,6 +36,13 @@
       "when": 1788195858222,
       "tag": "0004_lethal_firestar",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1788308241557,
+      "tag": "0005_famous_colossus",
+      "breakpoints": true
     }
   ]
 }

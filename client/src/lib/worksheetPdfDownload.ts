@@ -45,7 +45,7 @@ function groupNumber(group: any) {
 }
 
 function componentLabel(member: any) {
-  const name = member.name || member.email || "Participante sem identificação";
+  const name = member.reportName || member.name || member.email || "Participante sem identificação";
   return member.course ? `${member.course} ${name}` : name;
 }
 

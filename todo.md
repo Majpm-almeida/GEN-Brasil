@@ -143,3 +143,7 @@
 - [x] Aplicar atraso breve no recolhimento do menu flutuante de salvamento para permitir o acesso às ações com o mouse.
 - [x] Criar teste, publicar e validar manualmente o atraso de recolhimento do menu flutuante.
 - [x] Validar manualmente, após o ajuste de atraso, a abertura do menu e a execução de Salvar rascunho e Finalizar nas telas Fichas-Síntese e Síntese e slides.
+- [x] Adicionar ao vínculo de participante do GT um nome de exibição específico para os relatórios.
+- [x] Permitir que Administrador e Dirigente do GT definam ou alterem o nome de exibição autorizado.
+- [x] Utilizar o nome de exibição nos PDFs e relatórios, mantendo o nome captado da conta apenas como referência administrativa.
+- [ ] Criar testes, publicar e validar manualmente a edição de nomes dos integrantes no relatório.

@@ -29,6 +29,7 @@ export const groupMembers = mysqlTable("groupMembers", {
   userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
   role: mysqlEnum("groupRole", ["dirigente", "relator", "integrante"]).default("integrante").notNull(),
   course: varchar("course", { length: 160 }),
+  reportName: varchar("reportName", { length: 160 }),
   active: boolean("active").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

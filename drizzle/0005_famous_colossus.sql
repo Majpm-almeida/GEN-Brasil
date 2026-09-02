@@ -1,0 +1,1 @@
+ALTER TABLE `groupMembers` ADD `reportName` varchar(160);

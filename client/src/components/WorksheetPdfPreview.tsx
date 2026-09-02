@@ -20,7 +20,7 @@ function worksheetNumber(lens: WorksheetLens) {
 }
 
 function memberLabel(member: any) {
-  const identity = member.name || member.email || "Participante sem identificação";
+  const identity = member.reportName || member.name || member.email || "Participante sem identificação";
   return member.course ? `${member.course} ${identity}` : identity;
 }
 

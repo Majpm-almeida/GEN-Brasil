@@ -146,4 +146,4 @@
 - [x] Adicionar ao vínculo de participante do GT um nome de exibição específico para os relatórios.
 - [x] Permitir que Administrador e Dirigente do GT definam ou alterem o nome de exibição autorizado.
 - [x] Utilizar o nome de exibição nos PDFs e relatórios, mantendo o nome captado da conta apenas como referência administrativa.
-- [ ] Criar testes, publicar e validar manualmente a edição de nomes dos integrantes no relatório.
+- [x] Criar testes, publicar e validar manualmente a edição de nomes dos integrantes no relatório.

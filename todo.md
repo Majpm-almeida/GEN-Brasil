@@ -139,6 +139,7 @@
 - [x] Substituir a barra fixa de salvamento das Fichas-Síntese por botão flutuante circular com ícone de disquete e ações expansíveis.
 - [x] Substituir a barra fixa de salvamento da Síntese e slides por botão flutuante circular com ícone de disquete e ações expansíveis.
 - [x] Garantir acionamento por mouse, teclado e telas sensíveis ao toque nos novos controles flutuantes.
-- [ ] Criar testes, publicar e validar manualmente os controles flutuantes de salvamento.
+- [x] Criar testes, publicar e validar manualmente os controles flutuantes de salvamento.
 - [x] Aplicar atraso breve no recolhimento do menu flutuante de salvamento para permitir o acesso às ações com o mouse.
-- [ ] Criar teste, publicar e validar manualmente o atraso de recolhimento do menu flutuante.
+- [x] Criar teste, publicar e validar manualmente o atraso de recolhimento do menu flutuante.
+- [x] Validar manualmente, após o ajuste de atraso, a abertura do menu e a execução de Salvar rascunho e Finalizar nas telas Fichas-Síntese e Síntese e slides.
